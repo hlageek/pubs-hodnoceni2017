@@ -14,7 +14,14 @@ tabPanel("Ranking data",
             
             textOutput("wd")
             
-        )) # tabpanel end
+        )),
+
+tabPanel("About",
+         fluidPage(
+             
+             includeMarkdown("www/about.Rmd")
+             
+         )) # tabpanel end# tabpanel end
 ) #end navbar page
 
 ) # shinyUI end 
