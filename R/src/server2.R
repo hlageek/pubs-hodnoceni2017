@@ -32,7 +32,7 @@
             
             sliderTextInput("percentile2", "AIS percentile", rev(seq(0, 100, 5)), selected = c(100,0), grid = TRUE)
             
-        } else if (data_source() == "scopus") {
+        } else if (data_source2() == "scopus") {
             
             sliderTextInput("percentile2", "SJR percentile", rev(seq(0, 100, 5)), selected = c(100,0), grid = TRUE)
             
@@ -92,8 +92,8 @@
             
         } else {
             
-            output$warn <- renderText({"Please select data to display."})
-            textOutput("warn")
+            output$warn2 <- renderText({"Please select data to display."})
+            textOutput("warn2")
         }
     })
     

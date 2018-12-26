@@ -5,7 +5,7 @@ page2 <- tabPanel(
         
         
         # TITLE AND HEADER PANEL FOR PAGE ####
-        titlePanel(title = "Czech R&D Evaluation 2017_2"),
+        titlePanel(title = "Czech R&D Evaluation 2017"),
         # Main panel name
         #headerPanel(h4("Visual guide")),
         #tags$br(),
