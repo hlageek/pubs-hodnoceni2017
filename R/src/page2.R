@@ -25,28 +25,48 @@ page2 <- tabPanel(
             # Start a row ####
             
             
-            column( # Left column ####
-                    2,
-                    # start columns 1-3
-                    
-                    # Left sidebar panel description
-                    h4("Data controls"),
-                    tags$br(),
-                    ("Filter displayed data"),
-                    tags$br(),
-                    
-                    # Changing the slider color
-                    # Source https://stackoverflow.com/questions/36906265/how-to-color-sliderbar-sliderinput
-                    
-                    
+            column(
+                # Left column ####
+                2,
+                # start columns 1-3
+                
+                # Left sidebar panel description
+                h4("Data controls"),
+                tags$br(),
+                ("Filter displayed data"),
+                tags$br(),
+                
+                # Changing the slider color
+                # Source https://stackoverflow.com/questions/36906265/how-to-color-sliderbar-sliderinput
+                
+                # switch between groups ####
+                
+                radioGroupButtons(
+                    inputId = "group_switch",
+                    label = "Enter comparative data",
+                    choices = c(
+                        "Primary" = "primary",
+                        "Secondary" = "secondary"
+                    ),
+                    selected = "primary",
+                    justified = TRUE
+                ),
+                
+                conditionalPanel(
+                    "input.group_switch == 'primary'",
                     # data source ####
                     
-                    wellPanel(pickerUI("data_source2", "Data source", c("Web of Science" = "wos", "Scopus" = "scopus"), "wos")),
+                    wellPanel(pickerUI(
+                        "data_source2",
+                        "Data source",
+                        c("Web of Science" = "wos", "Scopus" = "scopus"),
+                        "wos"
+                    )),
                     
                     
                     
                     # Input organization  ####
-                    # called by Shiny module via helpers 
+                    # called by Shiny module via helpers
                     # Last argument draws a set of possible values from the data file
                     
                     wellPanel(uiOutput("data_controls2")),
@@ -55,9 +75,38 @@ page2 <- tabPanel(
                     
                     # Input AIS/SJR score ####
                     
-                    uiOutput("score2"),
-                    textOutput("test2")
+                    uiOutput("score2")
                     
+                ),
+                # end of conditional panel 1
+                
+                conditionalPanel(
+                    "input.group_switch == 'secondary'",
+                    # data source ####
+                    
+                    wellPanel(pickerUI(
+                        "data_source22",
+                        "Data source",
+                        c("Web of Science" = "wos", "Scopus" = "scopus"),
+                        "wos"
+                    )),
+                    
+                    
+                    
+                    # Input organization  ####
+                    # called by Shiny module via helpers
+                    # Last argument draws a set of possible values from the data file
+                    
+                    wellPanel(uiOutput("data_controls22")),
+                    
+                    
+                    
+                    # Input AIS/SJR score ####
+                    
+                    uiOutput("score22")
+                    
+                ) # end of conditional panel 2
+                
             ), # end columns 1-2
             
             

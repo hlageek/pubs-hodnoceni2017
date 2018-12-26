@@ -53,6 +53,63 @@
     output$percentile_high2 <- renderText({input$percentile2[1]})
     output$percentile_low2 <- renderText({input$percentile2[2]})
     
+# duplicated start ####    
+    
+
+    
+    # data choices ####
+    
+    data_source22 <- callModule(picker, "data_source22")
+    
+    # prepare source data to work with based on data source ####
+    # WoS or Scopus
+    source_data22 <- reactive({national_results  %>% 
+            select(segment, org, discs, ais, sjr, title) %>% 
+            filter(segment == data_source22()) 
+    })
+    
+    # Input discipline and organization ####
+    
+    output$data_controls22 <- renderUI({
+        
+        tagList(
+            filterSelectUI("org22", label = "Select organization", source_data22()$org),
+            
+            filterSelectUI("discs22", label = "Select discipline", source_data22()$discs)
+        )
+    })
+    
+    # Input score  ####
+    
+    output$score22 <- renderUI({
+        
+        
+        if (data_source22() == "wos") {
+            
+            sliderTextInput("percentile22", "AIS percentile", rev(seq(0, 100, 5)), selected = c(100,0), grid = TRUE)
+            
+        } else if (data_source2() == "scopus") {
+            
+            sliderTextInput("percentile22", "SJR percentile", rev(seq(0, 100, 5)), selected = c(100,0), grid = TRUE)
+            
+        }
+    })
+    
+    # grab organization input ####
+    org22 <- callModule(filterSelect, "org22")
+    
+    # grab discipline input ####
+    discs22 <- callModule(filterSelect, "discs22")
+    
+    # grab percentiles ####
+    
+    output$percentile_high22 <- renderText({input$percentile22[1]})
+    output$percentile_low22 <- renderText({input$percentile22[2]}) 
+    
+
+# duplicated end ####    
+    
+    
     
     # render organization ####
     output$out_org2 <- renderText({org2()})
