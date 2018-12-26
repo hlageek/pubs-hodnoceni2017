@@ -1,11 +1,11 @@
-page1 <- tabPanel(
-    "Bibliometric data",
+page2 <- tabPanel(
+    "Ranking data",
     fluidPage(
         theme = shinytheme("united"),
         
         
         # TITLE AND HEADER PANEL FOR PAGE ####
-        titlePanel(title = "Czech R&D Evaluation 2017"),
+        titlePanel(title = "Czech R&D Evaluation 2017_2"),
         # Main panel name
         #headerPanel(h4("Visual guide")),
         #tags$br(),
@@ -41,7 +41,7 @@ page1 <- tabPanel(
                     
                     # data source ####
                     
-                    wellPanel(pickerUI("data_source", "Data source", c("Web of Science" = "wos", "Scopus" = "scopus"), "wos")),
+                    wellPanel(pickerUI("data_source2", "Data source", c("Web of Science" = "wos", "Scopus" = "scopus"), "wos")),
                     
                     
                     
@@ -49,14 +49,14 @@ page1 <- tabPanel(
                     # called by Shiny module via helpers 
                     # Last argument draws a set of possible values from the data file
                     
-                    wellPanel(uiOutput("data_controls")),
+                    wellPanel(uiOutput("data_controls2")),
                     
                     
                     
                     # Input AIS/SJR score ####
                     
-                    uiOutput("score"),
-                    textOutput("test")
+                    uiOutput("score2"),
+                    textOutput("test2")
                     
             ), # end columns 1-2
             
@@ -72,11 +72,11 @@ page1 <- tabPanel(
                     tags$br(),
                     
                     # Output text ####
-                    textOutput("out_org"),
+                    textOutput("out_org2"),
                     
                     
                     # Output plotly ####
-                    uiOutput("plotui")#,
+                    uiOutput("plotui2")#,
                     #plotlyOutput("plot")
                     
                     
@@ -95,23 +95,23 @@ page1 <- tabPanel(
                     
                     wellPanel(
                         # Input plot title ####
-                        textInput(inputId = "plot_title", 
+                        textInput(inputId = "plot_title2", 
                                   label = "Plot title", 
                                   placeholder = "Custom title"),
-                        actionButton(inputId = "update_plot_title", 
+                        actionButton(inputId = "update_plot_title2", 
                                      label =  "Update plot title")),
                     
                     # Input ggplot2 theme  ####
                     # via Shiny module in helpers
                     # Arguments take choices and default value
-                    wellPanel(singleSelectUI("theme", 
+                    wellPanel(singleSelectUI("theme2", 
                                              label = "Plot theme", 
                                              c("Stats", "Grid", "Void", "Classic"), 
                                              "Stats")),
                     
                     
                     # Input plot size ####
-                    wellPanel(singleSelectUI("plot_size", "Resize plot", c(as.character(seq(200, 1200, 100)), "auto"), "auto"))
+                    wellPanel(singleSelectUI("plot_size2", "Resize plot", c(as.character(seq(200, 1200, 100)), "auto"), "auto"))
                     
                     
             ) # end columns 10-12

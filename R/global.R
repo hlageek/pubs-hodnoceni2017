@@ -17,6 +17,7 @@ load("../data/scales2017/scales2017_processed.RData")
 source("helpers.R", local = T)
 source("src/org_by_disc.R", local = T)
 source("src/page1.R", local = T)
+source("src/page2.R", local = T)
 
 
 
