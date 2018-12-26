@@ -8,7 +8,7 @@
     # prepare source data to work with based on data source ####
     # WoS or Scopus
     source_data2 <- reactive({national_results  %>% 
-            select(segment, org, discs, ais, sjr) %>% 
+            select(segment, org, discs, ais, sjr, title) %>% 
             filter(segment == data_source2()) 
     })
     
@@ -79,7 +79,7 @@
         if (isTruthy(org2()) | isTruthy(discs2())) {
             
             output$myplot2 <- renderPlotly({
-                org_by_disc(source_data = source_data2(),
+                plot_freq_words(source_data = source_data2(),
                             input_org = org2(),
                             input_discs =  discs2(),
                             input_theme = theme2(),
@@ -96,6 +96,7 @@
             textOutput("warn2")
         }
     })
+    
     
     
     

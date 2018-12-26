@@ -1,5 +1,5 @@
 page2 <- tabPanel(
-    "Ranking data",
+    "Keywords data",
     fluidPage(
         theme = shinytheme("united"),
         

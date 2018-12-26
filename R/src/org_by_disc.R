@@ -14,6 +14,7 @@ req(source_data)
     
     
     source_data <- source_data %>%
+        group_by(discs) %>% 
        { if (!is.na(.$ais[1])) { # filter AIS for WOS data
             {
                 if (input_pct_high < 100 |
@@ -25,23 +26,25 @@ req(source_data)
                     ))
                 else
                     .
-            }
-        } else if (!is.na(.$sjr[1])) { # filter SJR for SCOPUS data
-            {
-                if (input_pct_high < 100 |
-                    input_pct_low > 0)
-                    filter(., between(
-                        sjr,
-                        ecdf_fun(sjr, input_pct_low / 100),
-                        ecdf_fun(sjr, input_pct_high / 100)
-                    ))
-                else
-                    . }
-        }    
-            }
-            
-# Plot for discipline only ####
-
+            } %>% 
+               ungroup()
+       } else if (!is.na(.$sjr[1])) { # filter SJR for SCOPUS data
+           {
+               if (input_pct_high < 100 |
+                   input_pct_low > 0)
+                   filter(., between(
+                       sjr,
+                       ecdf_fun(sjr, input_pct_low / 100),
+                       ecdf_fun(sjr, input_pct_high / 100)
+                   ))
+               else
+                   . }
+       }    
+       } %>% 
+        ungroup()
+    
+    # Plot for discipline only ####
+    
     if (isTruthy(input_discs) & !isTruthy(input_org)) {
         
         myplot <- source_data %>% 
@@ -70,34 +73,34 @@ req(source_data)
         #                             title2 = input_title)
         
         
-        } 
-
-# Plot for organization only ####  
+    } 
+    
+    # Plot for organization only ####  
     if (!isTruthy(input_discs) & isTruthy(input_org)) {
         
-                
-                myplot <- source_data %>% 
-                    filter(org %in% input_org) %>% 
-                    group_by(org) %>% 
-                    count(discs) %>% 
-                    ggplot(aes(x = reorder(factor(discs), n), 
-                               y = n, 
-                               fill = org,
-                               text = paste(org, "\n",
-                                            discs, "\n",
-                                            n))) +
-                    geom_bar(stat = "identity", 
-                             position = position_dodge(preserve = "single")) +
-                    labs(x = "", y = "", title = input_title) +
-                    theme_select +
-                    theme(legend.title = element_blank()) +
-                    coord_flip() #+
-                #scale_fill_brewer(type = "qual", palette = "Set1", direction = 1)
-                
-            
-            }
-# Plot for both discipline and organization ####    
-
+        
+        myplot <- source_data %>% 
+            filter(org %in% input_org) %>% 
+            group_by(org) %>% 
+            count(discs) %>% 
+            ggplot(aes(x = reorder(factor(discs), n), 
+                       y = n, 
+                       fill = org,
+                       text = paste(org, "\n",
+                                    discs, "\n",
+                                    n))) +
+            geom_bar(stat = "identity", 
+                     position = position_dodge(preserve = "single")) +
+            labs(x = "", y = "", title = input_title) +
+            theme_select +
+            theme(legend.title = element_blank()) +
+            coord_flip() #+
+        #scale_fill_brewer(type = "qual", palette = "Set1", direction = 1)
+        
+        
+    }
+    # Plot for both discipline and organization ####    
+    
     if (isTruthy(input_discs) & isTruthy(input_org)) {
         
         
@@ -122,12 +125,12 @@ req(source_data)
         
         
     }
-   
-# conversion to Plotly ####
-
+    
+    # conversion to Plotly ####
+    
     if (exists("myplot")) {
-    ggplotly(myplot, tooltip = "text") %>% 
-        layout(legend = list(orientation = "v",
+        ggplotly(myplot, tooltip = "text") %>% 
+            layout(legend = list(orientation = "v",
                              xanchor = "right",
                              y = 0))
     } # end plotly code
