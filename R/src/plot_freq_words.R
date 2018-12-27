@@ -129,19 +129,20 @@ req(source_data)
     myplot <- source_data %>% 
         filter(org %in% input_org) %>% 
         unnest_tokens(words, title) %>% 
-        anti_join(stop_words, by=c("words" = "word")) %>%  count(words) %>% 
+        anti_join(stop_words, by=c("words" = "word")) %>%  count(words, org) %>% 
             arrange(desc(n)) %>% 
             top_n(25, n) %>% 
         ggplot(aes(x = reorder(factor(words), n), 
                    y = n, 
                    text = paste(words, "\n",
-                                n))) +
+                                n), fill = org)) +
         geom_bar(stat = "identity", 
                  position = position_dodge(preserve = "single")) +
         labs(x = "", y = "", title = input_title) +
         theme_select +
         theme(legend.title = element_blank()) +
         coord_flip() #+
+        #{if (length(unique(.$org)) > 1) scale_fill_manual(values = "#F8766D")}
     #scale_fill_brewer(type = "qual", palette = "Set1", direction = 1)
     
     
