@@ -147,5 +147,41 @@ journals_scopus <- sheets  %>%
 journals <- bind_rows(journals_scopus, journals_wos) %>% 
     select(segment, discs, title, issn, e_issn, ais, sjr)
 
-if (!file.exists("data/processed/national_results.tsv")) write_tsv(national_results, "data/processed/national_results.tsv")
-if (!file.exists("data/processed/journals.tsv")) write_tsv(journals, "data/processed/journals.tsv")
+natural_sciences_scopus <- c("11. Agricultural and Biological Sciences", "13. Biochemistry, Genetics and Molecular Biology", "16. Chemistry", "17. Computer Science", "19. Earth and Planetary Sciences", "23. Environmental Science", "24. Immunology and Microbiology", "26. Mathematics", "31. Physics and Astronomy")
+
+engineering_tech_scopus <- c("13. Biochemistry, Genetics and Molecular Biology", "15. Chemical Engineering", "16. Chemistry", "17. Computer Science", "19. Earth and Planetary Sciences", "21. Energy", "22. Engineering", "23. Environmental Science", "25. Materials Science")
+
+medical_health_scopus <- c("13. Biochemistry, Genetics and Molecular Biology", "22. Engineering", "24. Immunology and Microbiology", "25. Materials Science", "27. Medicine", "28. Neuroscience", "29. Nursing", "30. Pharmacology, Toxicology and Pharmaceutics", "32. Psychology", "35. Dentistry", "36. Health Professions")
+
+agricult_veterinary_scopus <- c("11. Agricultural and Biological Sciences", "34. Veterinary")
+
+social_sci_scopus <- c("14. Business, Management and Accounting", "18. Decision Sciences", "19. Earth and Planetary Sciences", "20. Economics, Econometrics and Finance", "32. Psychology", "33. Social Sciences")
+
+humanities_arts_scopus <- c("12. Arts and Humanities", "33. Social Sciences")
+
+multi_disc_scopus <- "10. Multidisciplinary"
+
+national_results_clean_discs <- national_results %>% 
+    mutate(discs = str_replace(discs, "(^\\d{2}) ", "\\1\\. ")) %>% # clean for conditional recode below
+    mutate(disc_group = case_when(
+        discs %in% natural_sciences_scopus ~ "Natural Sciences",
+        discs %in% engineering_tech_scopus ~ "Engineering and Technology",
+        discs %in% medical_health_scopus ~ "Medical and Health Sciences",
+        discs %in% agricult_veterinary_scopus ~ "Agricultural and Veterinary Sciences",
+        discs %in% social_sci_scopus ~ "Social Sciences",
+        discs %in% humanities_arts_scopus ~ "Humanities and the Arts",
+        discs %in% multi_disc_scopus ~ "Multidisciplinary",
+        str_detect(discs, "^1\\.") ~ "Natural Sciences",
+        str_detect(discs, "^2\\.") ~ "Engineering and Technology",
+        str_detect(discs, "^3\\.") ~ "Medical and Health Sciences",
+        str_detect(discs, "^4\\.") ~ "Agricultural and Veterinary Sciences",
+        str_detect(discs, "^5\\.") ~ "Social Sciences",
+        str_detect(discs, "^6\\.") ~ "Humanities and the Arts"
+        ))  %>% 
+    mutate(discs = str_replace(discs, "^[^A-Z]*", ""),
+           discs = str_replace(discs, "^O1a\\s", ""),
+           discs = str_replace(discs, "\\.xlsx$", "") )  # clean for presentation of data
+
+
+if (!file.exists("data/processed/national_results.tsv")) readr::write_tsv(national_results_clean_discs, "data/processed/national_results.tsv")
+if (!file.exists("data/processed/journals.tsv")) readr::write_tsv(journals, "data/processed/journals.tsv")
