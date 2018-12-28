@@ -53,7 +53,7 @@ req(source_data)
         ggplot(aes(x = reorder(factor(words), n), 
                    y = n, 
                    text = paste(words, "\n",
-                                n), fill = input_discs)) +
+                                n), fill = discs)) +
         geom_bar(stat = "identity", 
                  position = position_dodge(preserve = "single")) +
         labs(x = "", y = "", title = input_title) +
@@ -95,11 +95,12 @@ req(source_data)
         filter(discs %in% input_discs) %>%
         unnest_tokens(words, title) %>% 
         anti_join(stop_words, by=c("words" = "word")) %>%  count(words, org, discs) %>% 
-       top_n(10, n) %>% 
+       top_n(25, n) %>% 
         ggplot(aes(x = reorder(factor(words), n), 
                    y = n, 
                    text = paste(words, "\n",
-                                n), fill = org)) +
+                                n), fill = org,
+                   label = discs)) +
         geom_bar(stat = "identity", 
                  position = position_dodge2(preserve = "single")) +
         labs(x = "", y = "", title = input_title) +
