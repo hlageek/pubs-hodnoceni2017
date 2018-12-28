@@ -41,97 +41,38 @@ req(source_data)
        }
     
     # Plot for discipline only ####
-    # 
-    #     if (isTruthy(input_discs) & !isTruthy(input_org)) {
-    #         
-    #         myplot <- source_data %>% 
-    #             filter(discs %in% input_discs) %>% 
-    #             group_by(org) %>% 
-    #             count(discs) %>% 
-    #             ggplot(aes(x = reorder(factor(org), n), 
-    #                        y = n, 
-    #                        fill = discs,
-    #                        text = paste(org, "\n",
-    #                                     discs, "\n",
-    #                                     n))) +
-    #             geom_bar(stat = "identity", 
-    #                      position = position_dodge(preserve = "single")) +
-    #             labs(x = "", y = "", title = input_title) +
-    #             theme_select +
-    #             theme(legend.title = element_blank()) +
-    #             coord_flip()
-    #         
-    #         # myplot <- bibliometric_plot(data = source_data, 
-    #         #                             filter2 = discs, 
-    #         #                             filter2use = input_discs, 
-    #         #                             main = discs, 
-    #         #                             secondary = org, 
-    #         #                             themer = theme_select,
-    #         #                             title2 = input_title)
-    #         
-    #         
-    #         } 
-    # 
-    # # Plot for organization only ####  
-    #     if (!isTruthy(input_discs) & isTruthy(input_org)) {
-    #         
-    #                 
-    #                 myplot <- source_data %>% 
-    #                     filter(org %in% input_org) %>% 
-    #                     group_by(org) %>% 
-    #                     count(discs) %>% 
-    #                     ggplot(aes(x = reorder(factor(discs), n), 
-    #                                y = n, 
-    #                                fill = org,
-    #                                text = paste(org, "\n",
-    #                                             discs, "\n",
-    #                                             n))) +
-    #                     geom_bar(stat = "identity", 
-    #                              position = position_dodge(preserve = "single")) +
-#                     labs(x = "", y = "", title = input_title) +
-#                     theme_select +
-#                     theme(legend.title = element_blank()) +
-#                     coord_flip() #+
-#                 #scale_fill_brewer(type = "qual", palette = "Set1", direction = 1)
-#                 
-#             
-#             }
-# # Plot for both discipline and organization ####    
-# 
-#     if (isTruthy(input_discs) & isTruthy(input_org)) {
-#         
-#         
-#         myplot <- source_data %>% 
-#             filter(org %in% input_org) %>%
-#             filter(discs %in% input_discs) %>%
-#             group_by(org) %>% 
-#             count(discs) %>% 
-#             ggplot(aes(x = reorder(factor(discs), n), 
-#                        y = n, 
-#                        fill = org,
-#                        text = paste(org, "\n",
-#                                     discs, "\n",
-#                                     n))) +
-#             geom_bar(stat = "identity", 
-#                      position = position_dodge(preserve = "single")) +
-#             labs(x = "", y = "", title = input_title) +
-#             theme_select +
-#             theme(legend.title = element_blank()) +
-#             coord_flip() #+
-#         #scale_fill_brewer(type = "qual", palette = "Set1", direction = 1)
-#         
-#         
-#     }
-#     
-    
-# word plot
-    
-    myplot <- source_data %>% 
-        filter(org %in% input_org) %>% 
+
+        if (isTruthy(input_discs) & !isTruthy(input_org)) {
+
+      myplot <- source_data %>%
+    filter(discs %in% input_discs) %>% 
+        unnest_tokens(words, title) %>% 
+        anti_join(stop_words, by=c("words" = "word")) %>%  count(words, discs) %>% 
+        arrange(desc(n)) %>% 
+        top_n(25, n) %>% 
+        ggplot(aes(x = reorder(factor(words), n), 
+                   y = n, 
+                   text = paste(words, "\n",
+                                n), fill = input_discs)) +
+        geom_bar(stat = "identity", 
+                 position = position_dodge(preserve = "single")) +
+        labs(x = "", y = "", title = input_title) +
+        theme_select +
+        theme(legend.title = element_blank()) +
+        coord_flip()      
+
+            }
+
+    # Plot for organization only ####
+        if (!isTruthy(input_discs) & isTruthy(input_org)) {
+
+
+                   myplot <- source_data %>%
+    filter(org %in% input_org) %>% 
         unnest_tokens(words, title) %>% 
         anti_join(stop_words, by=c("words" = "word")) %>%  count(words, org) %>% 
-            arrange(desc(n)) %>% 
-            top_n(25, n) %>% 
+        arrange(desc(n)) %>% 
+        top_n(25, n) %>% 
         ggplot(aes(x = reorder(factor(words), n), 
                    y = n, 
                    text = paste(words, "\n",
@@ -141,9 +82,35 @@ req(source_data)
         labs(x = "", y = "", title = input_title) +
         theme_select +
         theme(legend.title = element_blank()) +
-        coord_flip() #+
-        #{if (length(unique(.$org)) > 1) scale_fill_manual(values = "#F8766D")}
-    #scale_fill_brewer(type = "qual", palette = "Set1", direction = 1)
+        coord_flip() 
+
+            }
+# # Plot for both discipline and organization ####    
+
+    if (isTruthy(input_discs) & isTruthy(input_org)) {
+
+
+    myplot <- source_data %>%
+        filter(org %in% input_org) %>%
+        filter(discs %in% input_discs) %>%
+        unnest_tokens(words, title) %>% 
+        anti_join(stop_words, by=c("words" = "word")) %>%  count(words, org, discs) %>% 
+       top_n(10, n) %>% 
+        ggplot(aes(x = reorder(factor(words), n), 
+                   y = n, 
+                   text = paste(words, "\n",
+                                n), fill = org)) +
+        geom_bar(stat = "identity", 
+                 position = position_dodge2(preserve = "single")) +
+        labs(x = "", y = "", title = input_title) +
+        theme_select +
+        theme(legend.title = element_blank()) +
+        coord_flip() 
+
+    }
+
+    
+
     
     
    
