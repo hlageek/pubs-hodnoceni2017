@@ -10,8 +10,8 @@ require(shinycssloaders)
 require(plotly)
 require(shinyWidgets)
 
-national_results <- data.table::fread("../data/processed/national_results.tsv")
-journals <- data.table::fread("../data/processed/journals.tsv")
+national_results <- feather::read_feather("../data/processed/national_results.feather")
+journals <- feather::read_feather("../data/processed/journals.feather")
 load("../data/scales2017/scales2017_processed.RData")
 
 # source functions

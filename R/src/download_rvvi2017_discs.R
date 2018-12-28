@@ -183,5 +183,5 @@ national_results_clean_discs <- national_results %>%
            discs = str_replace(discs, "\\.xlsx$", "") )  # clean for presentation of data
 
 
-if (!file.exists("data/processed/national_results.tsv")) readr::write_tsv(national_results_clean_discs, "data/processed/national_results.tsv")
-if (!file.exists("data/processed/journals.tsv")) readr::write_tsv(journals, "data/processed/journals.tsv")
+if (!file.exists("data/processed/national_results.feather")) feather::write_feather(national_results_clean_discs, "data/processed/national_results.feather")
+if (!file.exists("data/processed/journals.feather")) feather::write_feather(journals, "data/processed/journals.feather")
