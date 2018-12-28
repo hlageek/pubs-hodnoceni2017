@@ -1,16 +1,7 @@
 
     
     
-    # data choices ####
-    
-    data_source2 <- callModule(picker, "data_source2")
-    
-    # prepare source data to work with based on data source ####
-    # WoS or Scopus
-    source_data2 <- reactive({national_results  %>% 
-            select(segment, org, discs, ais, sjr, title) %>% 
-            filter(segment == data_source2()) 
-    })
+  
     
     # Input discipline and organization ####
     
@@ -127,6 +118,17 @@
         valueExpr = { input$plot_title2 },
         ignoreNULL = FALSE
     )
+    
+    # data choices ####
+    
+    data_source2 <- callModule(picker, "data_source2")
+    
+    # prepare source data to work with based on data source ####
+    # WoS or Scopus
+    source_data2 <- reactive({national_results  %>% 
+            select(segment, org, discs, ais, sjr, title) %>% 
+            filter(segment == data_source2()) 
+    })
     
     # Plot function ####
     
