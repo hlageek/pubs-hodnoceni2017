@@ -13,7 +13,7 @@ req(source_data)
     # Percentile filter ####
     
     
-    source_data <- source_data %>%
+    plot_data <- reactive({ source_data %>%
        { if (!is.na(.$ais[1])) { # filter AIS for WOS data
             {
                 if (input_pct_high < 100 |
@@ -39,12 +39,12 @@ req(source_data)
                    . }
        }    
        }
-    
+    })
     # Plot for discipline only ####
 
         if (isTruthy(input_discs) & !isTruthy(input_org)) {
 
-      myplot <- source_data %>%
+      myplot <- plot_data() %>%
     filter(discs %in% input_discs) %>% 
         unnest_tokens(words, title) %>% 
         anti_join(stop_words, by=c("words" = "word")) %>%  count(words, discs) %>% 
@@ -67,7 +67,7 @@ req(source_data)
         if (!isTruthy(input_discs) & isTruthy(input_org)) {
 
 
-                   myplot <- source_data %>%
+                   myplot <- plot_data() %>%
     filter(org %in% input_org) %>% 
         unnest_tokens(words, title) %>% 
         anti_join(stop_words, by=c("words" = "word")) %>%  count(words, org) %>% 
@@ -90,7 +90,7 @@ req(source_data)
     if (isTruthy(input_discs) & isTruthy(input_org)) {
 
 
-    myplot <- source_data %>%
+    myplot <- plot_data() %>%
         filter(org %in% input_org) %>%
         filter(discs %in% input_discs) %>%
         unnest_tokens(words, title) %>% 

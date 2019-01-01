@@ -13,7 +13,7 @@ req(source_data)
     # Percentile filter ####
     
     
-    source_data <- source_data %>%
+    plot_data <- reactive({ source_data %>%
         group_by(discs) %>% 
        { if (!is.na(.$ais[1])) { # filter AIS for WOS data
             {
@@ -42,12 +42,12 @@ req(source_data)
        }    
        } %>% 
         ungroup()
-    
+    })
     # Plot for discipline only ####
     
     if (isTruthy(input_discs) & !isTruthy(input_org)) {
         
-        myplot <- source_data %>% 
+        myplot <- plot_data() %>% 
             filter(discs %in% input_discs) %>% 
             group_by(org) %>% 
             count(discs) %>% 
@@ -79,7 +79,7 @@ req(source_data)
     if (!isTruthy(input_discs) & isTruthy(input_org)) {
         
         
-        myplot <- source_data %>% 
+        myplot <- plot_data() %>% 
             filter(org %in% input_org) %>% 
             group_by(org) %>% 
             count(discs) %>% 
@@ -104,7 +104,7 @@ req(source_data)
     if (isTruthy(input_discs) & isTruthy(input_org)) {
         
         
-        myplot <- source_data %>% 
+        myplot <- plot_data() %>% 
             filter(org %in% input_org) %>%
             filter(discs %in% input_discs) %>%
             group_by(org) %>% 
