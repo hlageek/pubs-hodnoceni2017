@@ -5,7 +5,10 @@
     
     data_source <- callModule(picker, "data_source")
     
-
+    # prepare source data to work with based on data source ####
+    source_data <- reactive({national_results  %>% 
+            filter(segment == data_source()) 
+    })
     
     # Input discipline and organization ####
     
@@ -66,11 +69,7 @@
         ignoreNULL = FALSE
     )
     
-    # prepare source data to work with based on data source ####
-    source_data <- reactive({national_results  %>% 
-            select(segment, org, discs, ais, sjr) %>% 
-            filter(segment == data_source()) 
-    })
+
     
     # Plot function ####
     

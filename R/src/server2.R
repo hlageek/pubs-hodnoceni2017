@@ -147,7 +147,7 @@
                             as.numeric(input$percentile2[1]))
             })
             
-            plotlyOutput("myplot2", height = plot_size())
+            plotlyOutput("myplot2", height = plot_size2())
             
         } else {
             

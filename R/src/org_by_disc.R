@@ -21,8 +21,8 @@ req(source_data)
                     input_pct_low > 0)
                     filter(., between(
                         ais,
-                        ecdf_fun(ais, input_pct_low / 100),
-                        ecdf_fun(ais, input_pct_high / 100)
+                        quantile(ais, input_pct_low / 100),
+                        quantile(ais, input_pct_high / 100)
                     ))
                 else
                     .
@@ -34,8 +34,8 @@ req(source_data)
                    input_pct_low > 0)
                    filter(., between(
                        sjr,
-                       ecdf_fun(sjr, input_pct_low / 100),
-                       ecdf_fun(sjr, input_pct_high / 100)
+                       quantile(sjr, input_pct_low / 100),
+                       quantile(sjr, input_pct_high / 100)
                    ))
                else
                    . }
