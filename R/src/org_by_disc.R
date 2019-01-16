@@ -3,6 +3,11 @@
 
 org_by_disc <- function(source_data, input_org, input_discs, input_theme, input_title, input_pct_low, input_pct_high) {
     
+    plot_data = national_results %>% sample_n(200)
+    input_org = plot_data %>% sample_n(2) %>% pull(org)
+    input_discs = plot_data %>% sample_n(2) %>% pull(discs)
+    
+    
 req(source_data)
     # Theme selector ####
     theme_select <- if (input_theme == "Void") theme_void() else 
@@ -47,20 +52,14 @@ req(source_data)
     
     if (isTruthy(input_discs) & !isTruthy(input_org)) {
         
-        myplot <- plot_data() %>% 
+        myplot <- plot_data %>% 
             filter(discs %in% input_discs) %>% 
-            group_by(org) %>% 
-            count(discs) %>% 
-            ggplot(aes(x = reorder(factor(org), n), 
-                       y = n, 
-                       fill = discs,
-                       text = paste(org, "\n",
-                                    discs, "\n",
-                                    n))) +
-            geom_bar(stat = "identity", 
-                     position = position_dodge(preserve = "single")) +
-            labs(x = "", y = "", title = input_title) +
-            theme_select +
+            filter(org %in% input_org) %>% 
+            ggplot(aes(x = factor(org), 
+                       y = ais, 
+                       fill = discs)) +
+            geom_boxplot() +
+            labs(x = "", y = "") +
             theme(legend.title = element_blank()) +
             coord_flip()
         
@@ -129,7 +128,8 @@ req(source_data)
     # conversion to Plotly ####
     
     if (exists("myplot")) {
-        ggplotly(myplot, tooltip = "text") %>% 
+        )
+, tooltip = "text") %>% 
             layout(legend = list(orientation = "v",
                              xanchor = "right",
                              y = 0))
