@@ -60,7 +60,7 @@ req(source_data)
         
         myplot <- plot_data() %>% 
             filter(discs %in% input_discs) %>% 
-            filter(!duplicated(title)) %>% 
+            #filter(!duplicated(title)) %>% 
             group_by(org) %>% 
             count(discs) %>% 
             ggplot(aes(x = reorder(factor(org), n), 
@@ -148,7 +148,7 @@ req(source_data)
         myplot <- plot_data() %>% 
             filter(org %in% input_org) %>%
             filter(discs %in% input_discs) %>%
-            filter(!duplicated(title)) %>% 
+            #filter(!duplicated(title)) %>% 
             group_by(org) %>% 
             count(discs) %>% 
             ggplot(aes(x = reorder(factor(discs), n), 
@@ -158,10 +158,10 @@ req(source_data)
                                     discs, "\n",
                                     n))) +
             scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-            # geom_bar(stat = "identity", 
-            #          position = position_dodge(preserve = "single")) +
             geom_bar(stat = "identity",
-                     position = position_stack()) +
+                     position = position_dodge(preserve = "single")) +
+            # geom_bar(stat = "identity",
+            #          position = position_stack()) +
             labs(x = "", y = "", title = input_title) +
             theme_select
         
