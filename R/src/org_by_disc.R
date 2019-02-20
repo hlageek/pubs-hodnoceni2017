@@ -86,7 +86,7 @@ req(source_data)
         # flip on/off
         if (flip_status == TRUE)  {
             myplot <- myplot +
-                theme(axis.text.x = element_text(angle = 45, 
+                theme(axis.text.x = element_text(angle = 75, 
                                                  vjust = 1, 
                                                  hjust=1))
         } else {
@@ -128,7 +128,7 @@ req(source_data)
         # flip on/off
         if (flip_status == TRUE)  {
             myplot <- myplot +
-                theme(axis.text.x = element_text(angle = 45, 
+                theme(axis.text.x = element_text(angle = 75, 
                                                  vjust = 1, 
                                                  hjust=1))
         } else {
@@ -156,8 +156,10 @@ req(source_data)
                                     discs, "\n",
                                     n))) +
             scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-            geom_bar(stat = "identity", 
-                     position = position_dodge(preserve = "single")) +
+            # geom_bar(stat = "identity", 
+            #          position = position_dodge(preserve = "single")) +
+            geom_bar(stat = "identity",
+                     position = position_stack()) +
             labs(x = "", y = "", title = input_title) +
             theme_select
         
@@ -173,7 +175,7 @@ req(source_data)
         # flip on/off
         if (flip_status == TRUE)  {
             myplot <- myplot +
-                    theme(axis.text.x = element_text(angle = 45, 
+                    theme(axis.text.x = element_text(angle = 75, 
                                                      vjust = 1, 
                                                      hjust=1))
                 } else {

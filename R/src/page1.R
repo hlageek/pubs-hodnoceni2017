@@ -5,17 +5,14 @@ page1 <- tabPanel(
         
         
         # TITLE AND HEADER PANEL FOR PAGE ####
-        titlePanel(title = "Czech R&D Evaluation 2017"),
+        titlePanel(title = "Czech R&D Evaluation 2017 Data"),
         # Main panel name
         #headerPanel(h4("Visual guide")),
         #tags$br(),
         tags$br(),
         p(
             a("Bibliometric evaluation of Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"),
-            "is a primary source of information on the results of Czech science. It is not, strictly speaking, a bibliographical database. Its basic unit of analysis is a",
-            tags$b("result"),
-            ",",
-            "i.e. various types of outcomes of basic and applied research supported with public expenditures."
+            "is a one of the pillars in a new policy for institutional R&D evaluation in the Czech Republic. This website provides visual interface to the bibliometric data used in the 2017 evaluation round."
         ),
         # Header title
         
