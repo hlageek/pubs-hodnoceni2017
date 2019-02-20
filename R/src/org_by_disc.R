@@ -39,7 +39,7 @@ req(source_data)
         dplyr::distinct(discs, .keep_all = TRUE) })
     # in scopus...
     quantiles_scopus <- reactive({ journals %>% 
-            filter(segment == "wos") %>% 
+            filter(segment == "scopus") %>% 
             mutate(discs = trimws(str_replace_all(discs, "[\\d\\.\\,]", ""))) %>%
             group_by(discs) %>% 
             mutate(quantiles = 
@@ -70,7 +70,8 @@ req(source_data)
            
                if (input_pct_high < 100 |
                    input_pct_low > 0) {
-
+                 
+                   source_data %>%
                    left_join(quantiles_scopus(), by = "discs") %>% 
                    group_by(discs) %>% 
                    filter(sjr > minq & sjr < maxq) %>% 
