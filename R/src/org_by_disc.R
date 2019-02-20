@@ -60,6 +60,7 @@ req(source_data)
         
         myplot <- plot_data() %>% 
             filter(discs %in% input_discs) %>% 
+            filter(!duplicated(title)) %>% 
             group_by(org) %>% 
             count(discs) %>% 
             ggplot(aes(x = reorder(factor(org), n), 
@@ -147,6 +148,7 @@ req(source_data)
         myplot <- plot_data() %>% 
             filter(org %in% input_org) %>%
             filter(discs %in% input_discs) %>%
+            filter(!duplicated(title)) %>% 
             group_by(org) %>% 
             count(discs) %>% 
             ggplot(aes(x = reorder(factor(discs), n), 
