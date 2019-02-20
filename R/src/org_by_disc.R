@@ -23,37 +23,66 @@ req(source_data)
     
     # Percentile filter ####
     
-    
-    plot_data <- reactive({ source_data %>%
+    # First we obtain disciplinary quantiles for all journals
+    # in wos....
+    quantiles_wos <- reactive({ journals %>% 
+        filter(segment == "wos") %>% 
+        mutate(discs = trimws(str_replace_all(discs, "[\\d\\.\\,]", ""))) %>%
         group_by(discs) %>% 
-       { if (!is.na(.$ais[1])) { # filter AIS for WOS data
-            {
+        mutate(quantiles = 
+                   list(quantile(ais, c(input_pct_low/100,
+                                        input_pct_high/100)))) %>%
+        mutate(minq = quantiles[[1]][[1]],
+               maxq = quantiles[[1]][[2]]) %>% 
+        ungroup() %>% 
+        select(discs, minq, maxq) %>% 
+        dplyr::distinct(discs, .keep_all = TRUE) })
+    # in scopus...
+    quantiles_scopus <- reactive({ journals %>% 
+            filter(segment == "wos") %>% 
+            mutate(discs = trimws(str_replace_all(discs, "[\\d\\.\\,]", ""))) %>%
+            group_by(discs) %>% 
+            mutate(quantiles = 
+                       list(quantile(sjr, c(input_pct_low/100, 
+                                            input_pct_high/100)))) %>%
+            mutate(minq = quantiles[[1]][[1]],
+                   maxq = quantiles[[1]][[2]]) %>% 
+            ungroup() %>% 
+            select(discs, minq, maxq) %>% 
+            dplyr::distinct(discs, .keep_all = TRUE) })
+    
+    plot_data <- reactive({ 
+       if (!is.na(source_data$ais[1])) { # filter AIS for WOS data
+            
                 if (input_pct_high < 100 |
-                    input_pct_low > 0)
-                    filter(., between(
-                        ais,
-                        quantile(ais, input_pct_low / 100),
-                        quantile(ais, input_pct_high / 100)
-                    ))
-                else
-                    .
-            } %>% 
-               ungroup()
-       } else if (!is.na(.$sjr[1])) { # filter SJR for SCOPUS data
-           {
+                    input_pct_low > 0) {
+                    
+                    source_data %>%
+                    left_join(quantiles_wos(), by = "discs") %>% 
+                    group_by(discs) %>% 
+                    filter(ais > minq & ais < maxq)  %>% 
+                    ungroup()
+      
+                } else {
+                    source_data }
+            } 
+       else if (!is.na(source_data$sjr[1])) { # filter SJR for SCOPUS data
+           
                if (input_pct_high < 100 |
-                   input_pct_low > 0)
-                   filter(., between(
-                       sjr,
-                       quantile(sjr, input_pct_low / 100),
-                       quantile(sjr, input_pct_high / 100)
-                   ))
-               else
-                   . }
-       }    
-       } %>% 
-        ungroup()
+                   input_pct_low > 0) {
+
+                   left_join(quantiles_scopus(), by = "discs") %>% 
+                   group_by(discs) %>% 
+                   filter(sjr > minq & sjr < maxq) %>% 
+                   ungroup()
+                   
+                   
+               } else {
+                   source_data }
+           }
     })
+    
+    
     # Plot for discipline only ####
     
     if (isTruthy(input_discs) & !isTruthy(input_org)) {
@@ -198,8 +227,8 @@ req(source_data)
         if (legend_status == TRUE) {
         ggplotly(myplot, tooltip = "text") %>% 
             layout(legend = list(orientation = "v",
-                             xanchor = "right",
-                             yanchor = "top",
+                             #xanchor = "right",
+                             #yanchor = "top",
                              x = input_leg_val_X,
                              y = input_leg_val_Y
                              ))
