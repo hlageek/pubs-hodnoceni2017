@@ -1,11 +1,22 @@
 
 
 
-org_by_disc <- function(source_data, input_org, input_discs, input_theme, input_title, input_pct_low, input_pct_high) {
+org_by_disc <- function(source_data, 
+                        input_org, 
+                        input_discs, 
+                        input_theme, 
+                        input_title, 
+                        input_pct_low, 
+                        input_pct_high,
+                        flip_status,
+                        legend_status,
+                        input_leg_val_X,
+                        input_leg_val_Y) {
     
 req(source_data)
     # Theme selector ####
-    theme_select <- if (input_theme == "Void") theme_void() else 
+    theme_select <- if (input_theme == "Void") theme_void() + theme(panel.grid.major = element_blank(), 
+                                                                    panel.grid.minor = element_blank()) else 
                     if (input_theme == "Stats")  theme_classic() else 
                     if (input_theme == "Grid")  theme_bw() else
                     if (input_theme == "Classic") theme_gray()
@@ -57,21 +68,31 @@ req(source_data)
                        text = paste(org, "\n",
                                     discs, "\n",
                                     n))) +
+            scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
             geom_bar(stat = "identity", 
                      position = position_dodge(preserve = "single")) +
             labs(x = "", y = "", title = input_title) +
-            theme_select +
-            theme(legend.title = element_blank()) +
-            coord_flip()
+            theme_select 
         
-        # myplot <- bibliometric_plot(data = source_data, 
-        #                             filter2 = discs, 
-        #                             filter2use = input_discs, 
-        #                             main = discs, 
-        #                             secondary = org, 
-        #                             themer = theme_select,
-        #                             title2 = input_title)
+        # legend on/off
+        if (legend_status == TRUE)  {
+            myplot <- myplot +
+                theme(legend.title = element_blank())
+        } else {
+            myplot <- myplot +
+                theme(legend.position="none") 
+        } 
         
+        # flip on/off
+        if (flip_status == TRUE)  {
+            myplot <- myplot +
+                theme(axis.text.x = element_text(angle = 45, 
+                                                 vjust = 1, 
+                                                 hjust=1))
+        } else {
+            myplot <- myplot +
+                coord_flip()
+        } 
         
     } 
     
@@ -89,13 +110,32 @@ req(source_data)
                        text = paste(org, "\n",
                                     discs, "\n",
                                     n))) +
+            scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
             geom_bar(stat = "identity", 
                      position = position_dodge(preserve = "single")) +
             labs(x = "", y = "", title = input_title) +
-            theme_select +
-            theme(legend.title = element_blank()) +
-            coord_flip() #+
-        #scale_fill_brewer(type = "qual", palette = "Set1", direction = 1)
+            theme_select 
+        
+        # legend on/off
+        if (legend_status == TRUE)  {
+            myplot <- myplot +
+                theme(legend.title = element_blank())
+        } else {
+            myplot <- myplot +
+                theme(legend.position="none") 
+        } 
+        
+        # flip on/off
+        if (flip_status == TRUE)  {
+            myplot <- myplot +
+                theme(axis.text.x = element_text(angle = 45, 
+                                                 vjust = 1, 
+                                                 hjust=1))
+        } else {
+            myplot <- myplot +
+                coord_flip()
+        } 
+        
         
         
     }
@@ -115,13 +155,33 @@ req(source_data)
                        text = paste(org, "\n",
                                     discs, "\n",
                                     n))) +
+            scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
             geom_bar(stat = "identity", 
                      position = position_dodge(preserve = "single")) +
             labs(x = "", y = "", title = input_title) +
-            theme_select +
-            theme(legend.title = element_blank()) +
-            coord_flip() #+
-        #scale_fill_brewer(type = "qual", palette = "Set1", direction = 1)
+            theme_select
+        
+        # legend on/off
+        if (legend_status == TRUE)  {
+            myplot <- myplot +
+                theme(legend.title = element_blank())
+        } else {
+            myplot <- myplot +
+                theme(legend.position="none") 
+        } 
+        
+        # flip on/off
+        if (flip_status == TRUE)  {
+            myplot <- myplot +
+                    theme(axis.text.x = element_text(angle = 45, 
+                                                     vjust = 1, 
+                                                     hjust=1))
+                } else {
+            myplot <- myplot +
+                    coord_flip()
+                } 
+             
+
         
         
     }
@@ -129,10 +189,22 @@ req(source_data)
     # conversion to Plotly ####
     
     if (exists("myplot")) {
+        
+        
+        if (legend_status == TRUE) {
         ggplotly(myplot, tooltip = "text") %>% 
             layout(legend = list(orientation = "v",
                              xanchor = "right",
-                             y = 0))
+                             yanchor = "top",
+                             x = input_leg_val_X,
+                             y = input_leg_val_Y
+                             ))
+                
+        } else {
+            
+            ggplotly(myplot, tooltip = "text")
+            
+        }
     } # end plotly code
     
 } # end of function definition

@@ -70,6 +70,44 @@
     )
     
 
+    # grab axis flipper ####
+    flip_status <- reactive({input$flip})
+    
+    # grab legend switch ####
+    legend_status <- reactive({input$legend})
+    
+    # adjust legend position ####
+    
+    
+        
+    output$adjust_leg_X <- renderUI({
+        if (legend_status() == TRUE) {
+        sliderInput("adjust_leg_val_X", "Legend X position",
+                    min = -2, 
+                    max = 3,
+                    step = 0.1, 
+                    round = TRUE,
+                    ticks = FALSE,
+                    value = 1)
+            }
+                         })
+    
+    output$adjust_leg_Y <- renderUI({
+        if (legend_status() == TRUE) {
+        sliderInput("adjust_leg_val_Y", "Legend Y position",
+                    min = -2, 
+                    max = 3,
+                    step = 0.1, 
+                    round = TRUE,
+                    ticks = FALSE,
+                    value = -0.1)
+        }
+                      })
+    
+    
+    leg_val_X <- reactive({input$adjust_leg_val_X})
+    leg_val_Y <- reactive({input$adjust_leg_val_Y})
+    
     
     # Plot function ####
     
@@ -85,7 +123,12 @@
                             input_theme = theme(),
                             input_title = new_plot_title(),
                             as.numeric(input$percentile[2]),
-                            as.numeric(input$percentile[1]))
+                            as.numeric(input$percentile[1]),
+                            flip_status = flip_status(),
+                            legend_status = legend_status(),
+                            input_leg_val_X = leg_val_X(),
+                            input_leg_val_Y = leg_val_Y()
+                            )
             })
             
             plotlyOutput("myplot", height = plot_size())
