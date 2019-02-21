@@ -28,11 +28,11 @@
         
         if (data_source() == "wos") {
             
-            sliderTextInput("percentile", "AIS percentile", rev(seq(0, 100, 5)), selected = c(100,0), grid = TRUE)
+            sliderTextInput("percentile", "AIS percentile", seq(0, 100, 5), selected = c(0,100), grid = TRUE, animate = TRUE)
             
         } else if (data_source() == "scopus") {
             
-            sliderTextInput("percentile", "SJR percentile", rev(seq(0, 100, 5)), selected = c(100,0), grid = TRUE)
+            sliderTextInput("percentile", "SJR percentile", seq(0, 100, 5), selected = c(0,100), grid = TRUE, animate = TRUE)
             
         }
     })
@@ -48,8 +48,9 @@
     
     # grab percentiles ####
     
-    output$percentile_high <- renderText({input$percentile[1]})
-    output$percentile_low <- renderText({input$percentile[2]})
+    output$percentile_low <- renderText({input$percentile[1]})
+    output$percentile_high <- renderText({input$percentile[2]})
+    
     
     
     # render organization ####
@@ -122,8 +123,8 @@
                             input_discs =  discs(),
                             input_theme = theme(),
                             input_title = new_plot_title(),
-                            input_pct_low = as.numeric(input$percentile[2]),
-                            input_pct_high = as.numeric(input$percentile[1]),
+                            input_pct_low = as.numeric(input$percentile[1]),
+                            input_pct_high = as.numeric(input$percentile[2]),
                             flip_status = flip_status(),
                             legend_status = legend_status(),
                             input_leg_val_X = leg_val_X(),
