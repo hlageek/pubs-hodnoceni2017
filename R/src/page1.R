@@ -65,12 +65,12 @@ page1 <- tabPanel(
                     # start columns 3-10
                     
                     # Middle panel title
-                    (div(h4("Visualization"), align = "center")),
+                    (div(h4("Chart"), align = "center")),
                     tags$br(),
                     
                     # Output text ####
-                    textOutput("out_org"),
-                    textOutput("leg_val"),
+                    #textOutput("out_org"),
+                    #textOutput("leg_val"),
                     
                     
                     # Output plotly ####

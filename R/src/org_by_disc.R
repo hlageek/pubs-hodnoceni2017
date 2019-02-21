@@ -88,11 +88,15 @@ req(source_data)
     
     if (isTruthy(input_discs) & !isTruthy(input_org)) {
         
-        myplot <- plot_data() %>% 
+        myplot_data <- plot_data() %>% 
             filter(discs %in% input_discs) %>% 
             #filter(!duplicated(title)) %>% 
             group_by(org) %>% 
-            count(discs) %>% 
+            count(discs)
+        
+        validate(need(nrow(myplot_data) > 0, "No data match the selected filters!"))
+        
+        myplot <- myplot_data %>% 
             ggplot(aes(x = reorder(factor(org), n), 
                        y = n, 
                        fill = discs,
@@ -131,10 +135,14 @@ req(source_data)
     if (!isTruthy(input_discs) & isTruthy(input_org)) {
         
         
-        myplot <- plot_data() %>% 
+        myplot_data <- plot_data() %>% 
             filter(org %in% input_org) %>% 
             group_by(org) %>% 
-            count(discs) %>% 
+            count(discs)
+        
+        validate(need(nrow(myplot_data) > 0, "No data match the selected filters!"))
+        
+        myplot <- myplot_data %>% 
             ggplot(aes(x = reorder(factor(discs), n), 
                        y = n, 
                        fill = org,
@@ -174,15 +182,21 @@ req(source_data)
     
     if (isTruthy(input_discs) & isTruthy(input_org)) {
         
-
         
-        myplot <- plot_data() %>% 
+        myplot_data <- plot_data() %>% 
             filter(org %in% input_org) %>%
             filter(discs %in% input_discs) %>%
             #filter(!duplicated(title)) %>% 
             group_by(org) %>% 
-            count(discs) %>% 
-            ggplot(aes(x = reorder(factor(discs), n), 
+            count(discs) #%>% 
+            # mutate(n = n_distinct(n())) %>% 
+            # group_by(org, discs) %>% 
+            # mutate(n = sum(n)/total_org) #pct
+        
+        validate(need(nrow(myplot_data) > 0, "No data match the selected filters!"))
+        
+         myplot <- myplot_data %>% 
+         ggplot(aes(x = reorder(factor(discs), n), 
                        y = n, 
                        fill = org,
                        text = paste(org, "\n",
@@ -191,6 +205,7 @@ req(source_data)
             scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
             geom_bar(stat = "identity",
                      position = position_dodge(preserve = "single")) +
+            #scale_y_continuous(labels = scales::percent_format()) + #pct
             # geom_bar(stat = "identity",
             #          position = position_stack()) +
             labs(x = "", y = "", title = input_title) +
@@ -222,10 +237,9 @@ req(source_data)
     }
     
     # conversion to Plotly ####
-    
-    validate(
-        need(plot_data(), "ddd")
-    )
+    if (exists("myplot")) {
+        
+   
         
        
         if (legend_status == TRUE) {
@@ -246,6 +260,6 @@ req(source_data)
             
         } 
     
-     # end plotly code
+    } # end plotly code
     
 } # end of function definition

@@ -188,7 +188,8 @@ national_results_clean_discs <- national_results %>%
 mutate(discs = str_replace(discs, "tics", "thics")) %>%
     mutate(discs = str_replace(discs, "\\,", "")) %>%
     mutate(discs = tools::toTitleCase(tolower(discs))) %>% 
-    filter(!str_detect(discs, "xlsx"))
+    filter(!str_detect(discs, "xlsx")) %>% 
+    mutate(org = str_remove(org, "\\,.*"))
 
 if (!file.exists("data/processed/national_results.feather")) feather::write_feather(national_results_clean_discs, "data/processed/national_results.feather")
 if (!file.exists("data/processed/journals.feather")) feather::write_feather(journals, "data/processed/journals.feather")

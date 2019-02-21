@@ -7,8 +7,14 @@
     
     # prepare source data to work with based on data source ####
     source_data <- reactive({national_results  %>% 
-            filter(segment == data_source()) 
-    })
+            filter(segment == data_source()) #%>% 
+                       # this segment could be moved to processed data rather than on the fly
+                   
+                      #test <- plot_data %>% 
+                       # group_by(segment, org) %>% 
+                       # mutate(total_org = n_distinct(n()))
+                       
+                       })
     
     # Input discipline and organization ####
     
