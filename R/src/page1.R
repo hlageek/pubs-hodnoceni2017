@@ -99,6 +99,16 @@ page1 <- tabPanel(
                         actionButton(inputId = "update_plot_title", 
                                      label =  "Update plot title")),
                     
+                    # Show legend ####
+                    
+                    materialSwitch(inputId = "legend", 
+                                   label = "Legend",
+                                   value = FALSE,
+                                   status = "primary"),
+                    
+                    uiOutput("adjust_leg_X"),
+                    uiOutput("adjust_leg_Y"),
+                    
                     # Input ggplot2 theme  ####
                     # via Shiny module in helpers
                     # Arguments take choices and default value
@@ -111,22 +121,14 @@ page1 <- tabPanel(
                     # Input plot size ####
                     wellPanel(singleSelectUI("plot_size", "Resize plot", c(as.character(seq(200, 1200, 100)), "auto"), "auto")),
                     
+                    
+                    
                     # Flip axes ####
                     
                     materialSwitch(inputId = "flip", 
                                    label = "Flip",
                                    value = FALSE,
-                                   status = "primary"),
-                    
-                    # Show legend ####
-                    
-                    materialSwitch(inputId = "legend", 
-                                   label = "Legend",
-                                   value = FALSE,
-                                   status = "primary"),
-                    
-                    uiOutput("adjust_leg_X"),
-                    uiOutput("adjust_leg_Y")
+                                   status = "primary")
                     
             ) # end columns 10-12
             

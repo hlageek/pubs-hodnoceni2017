@@ -132,7 +132,10 @@
                             )
             })
             
+           
+            
             plotlyOutput("myplot", height = plot_size())
+                
             
         } else {
             

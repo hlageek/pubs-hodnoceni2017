@@ -145,7 +145,11 @@ journals_scopus <- sheets  %>%
     mutate(title = tools::toTitleCase(tolower(title)))
 
 journals <- bind_rows(journals_scopus, journals_wos) %>% 
-    select(segment, discs, title, issn, e_issn, ais, sjr)
+    select(segment, discs, title, issn, e_issn, ais, sjr) %>% 
+    mutate(discs = str_replace(discs, "tics", "thics")) %>%
+    mutate(discs = str_replace(discs, "\\,", "")) %>%
+    mutate(discs = tools::toTitleCase(tolower(discs))) %>% 
+    filter(!str_detect(discs, "xlsx"))
 
 natural_sciences_scopus <- c("11. Agricultural and Biological Sciences", "13. Biochemistry, Genetics and Molecular Biology", "16. Chemistry", "17. Computer Science", "19. Earth and Planetary Sciences", "23. Environmental Science", "24. Immunology and Microbiology", "26. Mathematics", "31. Physics and Astronomy")
 
@@ -180,8 +184,11 @@ national_results_clean_discs <- national_results %>%
         ))  %>% 
     mutate(discs = str_replace(discs, "^[^A-Z]*", ""),
            discs = str_replace(discs, "^O1a\\s", ""),
-           discs = str_replace(discs, "\\.xlsx$", "") )  # clean for presentation of data
-
+           discs = str_replace(discs, "\\.xlsx$", "") )  %>% # clean for presentation of data
+mutate(discs = str_replace(discs, "tics", "thics")) %>%
+    mutate(discs = str_replace(discs, "\\,", "")) %>%
+    mutate(discs = tools::toTitleCase(tolower(discs))) %>% 
+    filter(!str_detect(discs, "xlsx"))
 
 if (!file.exists("data/processed/national_results.feather")) feather::write_feather(national_results_clean_discs, "data/processed/national_results.feather")
 if (!file.exists("data/processed/journals.feather")) feather::write_feather(journals, "data/processed/journals.feather")

@@ -60,7 +60,7 @@ req(source_data)
                     source_data %>%
                     left_join(quantiles_wos(), by = "discs") %>% 
                     group_by(discs) %>% 
-                    filter(ais > minq & ais < maxq)  %>% 
+                    filter(ais > minq & ais <= maxq)  %>% 
                     ungroup()
       
                 } else {
@@ -74,7 +74,7 @@ req(source_data)
                    source_data %>%
                    left_join(quantiles_scopus(), by = "discs") %>% 
                    group_by(discs) %>% 
-                   filter(sjr > minq & sjr < maxq) %>% 
+                   filter(sjr > minq & sjr <= maxq) %>% 
                    ungroup()
                    
                    
@@ -174,6 +174,7 @@ req(source_data)
     
     if (isTruthy(input_discs) & isTruthy(input_org)) {
         
+
         
         myplot <- plot_data() %>% 
             filter(org %in% input_org) %>%
@@ -222,10 +223,14 @@ req(source_data)
     
     # conversion to Plotly ####
     
-    if (exists("myplot")) {
+    validate(
+        need(plot_data(), "ddd")
+    )
         
-        
+       
         if (legend_status == TRUE) {
+            
+
         ggplotly(myplot, tooltip = "text") %>% 
             layout(legend = list(orientation = "v",
                              #xanchor = "right",
@@ -236,9 +241,11 @@ req(source_data)
                 
         } else {
             
+            
             ggplotly(myplot, tooltip = "text")
             
-        }
-    } # end plotly code
+        } 
+    
+     # end plotly code
     
 } # end of function definition
