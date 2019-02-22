@@ -88,7 +88,10 @@ req(source_data)
     # Plot for discipline only ####
     
     if (isTruthy(input_discs) & !isTruthy(input_org)) {
-        
+ 
+        # 1. counts ####
+        if (input_pct_score == FALSE) { 
+            
         myplot_data <- plot_data() %>% 
             filter(discs %in% input_discs) %>% 
             #filter(!duplicated(title)) %>% 
@@ -109,6 +112,41 @@ req(source_data)
                      position = position_dodge(preserve = "single")) +
             labs(x = "", y = "", title = input_title) +
             theme_select 
+        }
+        
+        # 2. pecentages ####
+        
+        if (input_pct_score == TRUE) { 
+            
+            myplot_data <- plot_data() %>% 
+                filter(discs %in% input_discs) %>% 
+                group_by(org) %>% 
+                mutate(n = n()) %>% 
+                group_by(org, discs) %>% 
+                mutate(n = round((n()/total_org), 2)) %>% 
+                distinct(org, discs, .keep_all = TRUE) #pct
+            
+            # myplot_data <- plot_data() %>% 
+            #     filter(discs %in% input_discs) %>% 
+            #     #filter(!duplicated(title)) %>% 
+            #     group_by(org) %>% 
+            #     count(discs)
+            
+            validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
+            
+            myplot <- myplot_data %>% 
+                ggplot(aes(x = reorder(factor(org), n), 
+                           y = n, 
+                           fill = discs,
+                           text = paste(org, "\n",
+                                        discs, "\n",
+                                        n))) +
+                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
+                geom_bar(stat = "identity", 
+                         position = position_dodge(preserve = "single")) +
+                labs(x = "", y = "", title = input_title) +
+                theme_select 
+        } 
         
         # legend on/off
         if (legend_status == TRUE)  {
@@ -132,31 +170,63 @@ req(source_data)
         
     } 
     
-    # Plot for organization only ####  
+ # Plot for organization only ####  
     if (!isTruthy(input_discs) & isTruthy(input_org)) {
         
         
-        myplot_data <- plot_data() %>% 
-            filter(org %in% input_org) %>% 
-            group_by(org) %>% 
-            count(discs)
+        # 1. counts ####
+        if (input_pct_score == FALSE) { 
+            
+            myplot_data <- plot_data() %>% 
+                filter(org %in% input_org) %>% 
+                group_by(org) %>% 
+                count(discs)
+            
+            validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
+            
+            myplot <- myplot_data %>% 
+                ggplot(aes(x = reorder(factor(discs), n), 
+                           y = n, 
+                           fill = org,
+                           text = paste(org, "\n",
+                                        discs, "\n",
+                                        n))) +
+                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
+                geom_bar(stat = "identity", 
+                         position = position_dodge(preserve = "single")) +
+                labs(x = "", y = "", title = input_title) +
+                theme_select 
+        } 
+    
+        # 2. pecentages ####
+    if (input_pct_score == TRUE) { 
+            
+            myplot_data <- plot_data() %>% 
+                filter(org %in% input_org) %>% 
+                group_by(org) %>% 
+                mutate(n = n()) %>% 
+                group_by(org, discs) %>% 
+                mutate(n = round((n()/total_org_disc), 2)) %>% 
+                distinct(org, discs, .keep_all = TRUE) #pct
+            
+            validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
+            
+            myplot <- myplot_data %>% 
+                ggplot(aes(x = reorder(factor(discs), n), 
+                           y = n, 
+                           fill = org,
+                           text = paste(org, "\n",
+                                        discs, "\n",
+                                        n))) +
+                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
+                geom_bar(stat = "identity", 
+                         position = position_dodge(preserve = "single")) +
+                scale_y_continuous(labels = scales::percent_format()) + #pct
+                labs(x = "", y = "", title = input_title) +
+                theme_select 
+        } 
         
-        validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
-        
-        myplot <- myplot_data %>% 
-            ggplot(aes(x = reorder(factor(discs), n), 
-                       y = n, 
-                       fill = org,
-                       text = paste(org, "\n",
-                                    discs, "\n",
-                                    n))) +
-            scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-            geom_bar(stat = "identity", 
-                     position = position_dodge(preserve = "single")) +
-            labs(x = "", y = "", title = input_title) +
-            theme_select 
-        
-        # legend on/off
+        # 3. legend on/off ####
         if (legend_status == TRUE)  {
             myplot <- myplot +
                 theme(legend.title = element_blank())
@@ -165,7 +235,7 @@ req(source_data)
                 theme(legend.position="none") 
         } 
         
-        # flip on/off
+        # 4. flip on/off ####
         if (flip_status == TRUE)  {
             myplot <- myplot +
                 theme(axis.text.x = element_text(angle = 75, 
@@ -179,6 +249,8 @@ req(source_data)
         
         
     }
+    
+    
     # Plot for both discipline and organization ####    
     
     if (isTruthy(input_discs) & isTruthy(input_org)) {

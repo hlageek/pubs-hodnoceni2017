@@ -92,7 +92,7 @@
         
     output$adjust_leg_X <- renderUI({
         if (legend_status() == TRUE) {
-        sliderInput("adjust_leg_val_X", "Legend X position",
+        sliderInput("adjust_leg_val_X", "Horizontal coordinate",
                     min = -2, 
                     max = 3,
                     step = 0.1, 
@@ -104,7 +104,7 @@
     
     output$adjust_leg_Y <- renderUI({
         if (legend_status() == TRUE) {
-        sliderInput("adjust_leg_val_Y", "Legend Y position",
+        sliderInput("adjust_leg_val_Y", "Vertical coordinate",
                     min = -2, 
                     max = 3,
                     step = 0.1, 

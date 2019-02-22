@@ -5,14 +5,15 @@ page1 <- tabPanel(
         
         
         # TITLE AND HEADER PANEL FOR PAGE ####
-        titlePanel(title = "Czech R&D Evaluation 2017 Data"),
+        titlePanel(title = "Charting Application for Czech R&D Evaluation Data: Evalvis 17+"),
         # Main panel name
         #headerPanel(h4("Visual guide")),
         #tags$br(),
         tags$br(),
+        
         p(
             
-            "This page provides visual interface to the institutional data used in the ", a("Bibliometric evaluation of the Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"), " for the 2017 evalution period."
+            "This page provides a visual interface to the institutional data used in the ", a("Bibliometric evaluation of the Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"), " for the 2017 evalution period."
             
         ),
         # Header title
@@ -28,7 +29,8 @@ page1 <- tabPanel(
                     # start columns 1-3
                     
                     # Left sidebar panel description
-                    h4("Data controls"),
+                    h4(""),
+                    #h4("Data controls"),
                     tags$br(),
                     ("Filter displayed data"),
                     tags$br(),
@@ -75,9 +77,7 @@ page1 <- tabPanel(
                     # Middle panel title
                     (div(h4("Chart"), align = "center")),
                     tags$br(),
-                    tags$br(),
-                    tags$br(),
-                    tags$br(),
+   
                     
                     # Output text ####
                     #textOutput("out_org"),
@@ -97,7 +97,8 @@ page1 <- tabPanel(
                     2,
                     
                     # Right sidedebar panel description
-                    h4("Visualization controls"),
+                    #h4("Visualization controls"),
+                    h4(""),
                     tags$br(),
                     ("Adjust visualizations"),
                     tags$br(),
