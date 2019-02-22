@@ -12,7 +12,8 @@ org_by_disc <- function(source_data,
                         legend_status,
                         input_leg_val_X,
                         input_leg_val_Y,
-                        input_pct_score) {
+                        input_pct_score,
+                        input_threshold_val) {
     
 req(source_data)
     # Theme selector ####
@@ -96,7 +97,8 @@ req(source_data)
             filter(discs %in% input_discs) %>% 
             #filter(!duplicated(title)) %>% 
             group_by(org) %>% 
-            count(discs)
+            count(discs) %>% 
+            filter(n > input_threshold_val)
         
         validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
         
@@ -124,7 +126,8 @@ req(source_data)
                 mutate(n = n()) %>% 
                 group_by(org, discs) %>% 
                 mutate(n = round((n()/total_org), 2)) %>% 
-                distinct(org, discs, .keep_all = TRUE) #pct
+                distinct(org, discs, .keep_all = TRUE) %>% #pct 
+                filter(total_org_disc > input_threshold_val) 
             
             # myplot_data <- plot_data() %>% 
             #     filter(discs %in% input_discs) %>% 
@@ -148,7 +151,7 @@ req(source_data)
                 theme_select 
         } 
         
-        # legend on/off
+        # legend on/off ####
         if (legend_status == TRUE)  {
             myplot <- myplot +
                 theme(legend.title = element_blank())
@@ -157,7 +160,7 @@ req(source_data)
                 theme(legend.position="none") 
         } 
         
-        # flip on/off
+        # flip on/off ####
         if (flip_status == TRUE)  {
             myplot <- myplot +
                 theme(axis.text.x = element_text(angle = 75, 
@@ -180,7 +183,8 @@ req(source_data)
             myplot_data <- plot_data() %>% 
                 filter(org %in% input_org) %>% 
                 group_by(org) %>% 
-                count(discs)
+                count(discs) %>% 
+                filter(n > input_threshold_val)
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
@@ -203,11 +207,10 @@ req(source_data)
             
             myplot_data <- plot_data() %>% 
                 filter(org %in% input_org) %>% 
-                group_by(org) %>% 
-                mutate(n = n()) %>% 
                 group_by(org, discs) %>% 
                 mutate(n = round((n()/total_org_disc), 2)) %>% 
-                distinct(org, discs, .keep_all = TRUE) #pct
+                distinct(org, discs, .keep_all = TRUE) %>%  #pct 
+                filter(total_org_disc > input_threshold_val) 
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
@@ -263,7 +266,8 @@ req(source_data)
                 filter(discs %in% input_discs) %>%
                 #filter(!duplicated(title)) %>% 
                 group_by(org) %>% 
-                count(discs)
+                count(discs) %>% 
+                filter(n > input_threshold_val)
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
@@ -295,7 +299,8 @@ req(source_data)
                 mutate(n = n()) %>% 
                 group_by(org, discs) %>% 
                 mutate(n = round((n()/total_org_disc), 2)) %>% 
-                distinct(org, discs, .keep_all = TRUE) #pct
+                distinct(org, discs, .keep_all = TRUE) %>% #pct 
+                filter(total_org_disc > input_threshold_val)
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             

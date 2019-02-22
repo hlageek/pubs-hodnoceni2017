@@ -55,16 +55,27 @@ page1 <- tabPanel(
                     wellPanel(
                     # Input AIS/SJR score ####
                     
-                    uiOutput("score"),
+                    uiOutput("score")
+                    
+                    ),
                     
                     # Flip percentages for AIS/SJR ####
                     p("Percentages"),
                     materialSwitch(inputId = "flip_pct_score", 
                                    label = "",
                                    value = FALSE,
-                                   status = "primary")
+                                   status = "primary"),
                     
-                    )
+                    # Set threshold for displayed data ####
+                    
+                    numericInput(inputId = "threshold",
+                                 label = "Set minimum count",
+                                 value = 0,
+                                 min = 0,
+                                 step = 1)
+                    
+                    
+                    
             ), # end columns 1-2
             
             

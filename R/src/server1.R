@@ -60,6 +60,8 @@
     # grab percentage score switch ####
     pct_score <- reactive({input$flip_pct_score})
     
+    # grab threshold value ####
+    threshold_val <- reactive({input$threshold})
     
     # render organization ####
     output$out_org <- renderText({org()})
@@ -138,7 +140,8 @@
                             legend_status = as.logical(legend_status()),
                             input_leg_val_X = leg_val_X(),
                             input_leg_val_Y = leg_val_Y(),
-                            input_pct_score = as.logical(pct_score())
+                            input_pct_score = as.logical(pct_score()),
+                            input_threshold_val = threshold_val()
                             )
             })
             
