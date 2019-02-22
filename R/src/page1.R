@@ -11,8 +11,9 @@ page1 <- tabPanel(
         #tags$br(),
         tags$br(),
         p(
-            a("Bibliometric evaluation of Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"),
-            "is a one of the pillars in a new policy for institutional R&D evaluation in the Czech Republic. This website provides visual interface to the bibliometric data used in the 2017 evaluation round."
+            
+            "This page provides visual interface to the institutional data used in the ", a("Bibliometric evaluation of the Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"), " for the 2017 evalution period."
+            
         ),
         # Header title
         
@@ -49,12 +50,19 @@ page1 <- tabPanel(
                     wellPanel(uiOutput("data_controls")),
                     
                     
-                    
+                    wellPanel(
                     # Input AIS/SJR score ####
                     
                     uiOutput("score"),
-                    textOutput("test")
                     
+                    # Flip percentages for AIS/SJR ####
+                    p("Percentages"),
+                    materialSwitch(inputId = "flip_pct_score", 
+                                   label = "",
+                                   value = FALSE,
+                                   status = "primary")
+                    
+                    )
             ), # end columns 1-2
             
             
@@ -66,6 +74,9 @@ page1 <- tabPanel(
                     
                     # Middle panel title
                     (div(h4("Chart"), align = "center")),
+                    tags$br(),
+                    tags$br(),
+                    tags$br(),
                     tags$br(),
                     
                     # Output text ####
@@ -100,15 +111,16 @@ page1 <- tabPanel(
                                      label =  "Update plot title")),
                     
                     # Show legend ####
-                    
+                    wellPanel(
+                    p(strong("Legend")),
                     materialSwitch(inputId = "legend", 
-                                   label = "Legend",
+                                   label = "",
                                    value = FALSE,
                                    status = "primary"),
                     
                     uiOutput("adjust_leg_X"),
-                    uiOutput("adjust_leg_Y"),
-                    
+                    uiOutput("adjust_leg_Y")
+                    ),
                     # Input ggplot2 theme  ####
                     # via Shiny module in helpers
                     # Arguments take choices and default value
@@ -125,8 +137,9 @@ page1 <- tabPanel(
                     
                     # Flip axes ####
                     
+                    p("Flip  perspective"),
                     materialSwitch(inputId = "flip", 
-                                   label = "Flip",
+                                   label = "",
                                    value = FALSE,
                                    status = "primary")
                     

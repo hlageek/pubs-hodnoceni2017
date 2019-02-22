@@ -7,13 +7,13 @@
     
     # prepare source data to work with based on data source ####
     source_data <- reactive({national_results  %>% 
-            filter(segment == data_source()) #%>% 
+            filter(segment == data_source()) %>% 
                        # this segment could be moved to processed data rather than on the fly
-                   
-                      #test <- plot_data %>% 
-                       # group_by(segment, org) %>% 
-                       # mutate(total_org = n_distinct(n()))
-                       
+        group_by(discs, org) %>% 
+            mutate(total_org_disc = n()) %>% 
+            group_by(org) %>% 
+            mutate(total_org = n()) %>%
+            ungroup()
                        })
     
     # Input discipline and organization ####
@@ -34,11 +34,11 @@
         
         if (data_source() == "wos") {
             
-            sliderTextInput("percentile", "AIS percentile", seq(0, 100, 5), selected = c(0,100), grid = TRUE, animate = TRUE)
+            sliderTextInput("percentile", "AIS percentile", seq(0, 100, 5), selected = c(0,100), grid = TRUE, animate = FALSE)
             
         } else if (data_source() == "scopus") {
             
-            sliderTextInput("percentile", "SJR percentile", seq(0, 100, 5), selected = c(0,100), grid = TRUE, animate = TRUE)
+            sliderTextInput("percentile", "SJR percentile", seq(0, 100, 5), selected = c(0,100), grid = TRUE, animate = FALSE)
             
         }
     })
@@ -54,9 +54,11 @@
     
     # grab percentiles ####
     
-    output$percentile_low <- renderText({input$percentile[1]})
-    output$percentile_high <- renderText({input$percentile[2]})
+    percentile_low <- reactive({input$percentile[1]})
+    percentile_high <- reactive({input$percentile[2]})
     
+    # grab percentage score switch ####
+    pct_score <- reactive({input$flip_pct_score})
     
     
     # render organization ####
@@ -83,6 +85,7 @@
     # grab legend switch ####
     legend_status <- reactive({input$legend})
     
+
     # adjust legend position ####
     
     
@@ -129,12 +132,13 @@
                             input_discs =  discs(),
                             input_theme = theme(),
                             input_title = new_plot_title(),
-                            input_pct_low = as.numeric(input$percentile[1]),
-                            input_pct_high = as.numeric(input$percentile[2]),
-                            flip_status = flip_status(),
-                            legend_status = legend_status(),
+                            input_pct_low = as.numeric(percentile_low()),
+                            input_pct_high = as.numeric(percentile_high()),
+                            flip_status = as.logical(flip_status()),
+                            legend_status = as.logical(legend_status()),
                             input_leg_val_X = leg_val_X(),
-                            input_leg_val_Y = leg_val_Y()
+                            input_leg_val_Y = leg_val_Y(),
+                            input_pct_score = as.logical(pct_score())
                             )
             })
             
