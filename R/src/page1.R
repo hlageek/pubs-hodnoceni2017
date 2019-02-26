@@ -5,7 +5,7 @@ page1 <- tabPanel(
         
         
         # TITLE AND HEADER PANEL FOR PAGE ####
-        titlePanel(title = "Charting Application for Czech R&D Evaluation Data: Evalvis 17+"),
+        titlePanel(title = "Evalvis 17+"),
         # Main panel name
         #headerPanel(h4("Visual guide")),
         #tags$br(),
@@ -13,7 +13,7 @@ page1 <- tabPanel(
         
         p(
             
-            "This page provides a visual interface to the institutional data used in the ", a("Bibliometric evaluation of the Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"), " for the 2017 evalution period."
+            "Charting application for the data from the ", a("bibliometric evaluation of the Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"), " at an organization level in 2017."
             
         ),
         # Header title
@@ -49,22 +49,26 @@ page1 <- tabPanel(
                     # called by Shiny module via helpers 
                     # Last argument draws a set of possible values from the data file
                     
-                    wellPanel(uiOutput("data_controls")),
+                    wellPanel(uiOutput("data_controls"),
+                              
+                              # Flip percentages for Orgs ####
+                              p("Percentages"),
+                              uiOutput("org_percentage")
+                              
+                              ),
                     
                     
                     wellPanel(
                     # Input AIS/SJR score ####
                     
-                    uiOutput("score")
-                    
-                    ),
+                    uiOutput("score"),
                     
                     # Flip percentages for AIS/SJR ####
                     p("Percentages"),
-                    materialSwitch(inputId = "flip_pct_score", 
-                                   label = "",
-                                   value = FALSE,
-                                   status = "primary"),
+                    uiOutput("score_percentage")
+                    
+                    ),
+
                     
                     # Set threshold for displayed data ####
                     

@@ -13,17 +13,19 @@ org_by_disc <- function(source_data,
                         input_leg_val_X,
                         input_leg_val_Y,
                         input_pct_score,
-                        input_threshold_val) {
+                        input_threshold_val,
+                        input_pct_score_org) {
     
-req(source_data)
-    # Theme selector ####
+req(source_data) # check if source is selected
+
+# Theme selector ####
     theme_select <- if (input_theme == "Void") theme_void() + theme(panel.grid.major = element_blank(), 
                                                                     panel.grid.minor = element_blank()) else 
                     if (input_theme == "Stats")  theme_classic() else 
                     if (input_theme == "Grid")  theme_bw() else
                     if (input_theme == "Classic") theme_gray()
     
-    # Percentile filter ####
+# Percentile filter ####
     
     # First we obtain disciplinary quantiles for all journals
     # in wos....
@@ -86,7 +88,7 @@ req(source_data)
     })
     
     
-    # Plot for discipline only ####
+ # Plot for discipline only ####
     
     if (isTruthy(input_discs) & !isTruthy(input_org)) {
  
@@ -98,7 +100,7 @@ req(source_data)
             #filter(!duplicated(title)) %>% 
             group_by(org) %>% 
             count(discs) %>% 
-            filter(n > input_threshold_val)
+            filter(n >= input_threshold_val)
         
         validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
         
@@ -116,7 +118,7 @@ req(source_data)
             theme_select 
         }
         
-        # 2. pecentages ####
+        # 2. pecentages score ####
         
         if (input_pct_score == TRUE) { 
             
@@ -125,9 +127,10 @@ req(source_data)
                 group_by(org) %>% 
                 mutate(n = n()) %>% 
                 group_by(org, discs) %>% 
-                mutate(n = round((n()/total_org), 2)) %>% 
+                filter(n >= input_threshold_val) %>% 
+                mutate(n = round((n()/total_org_disc), 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE) %>% #pct 
-                filter(total_org_disc > input_threshold_val) 
+                filter(total_org_disc >= input_threshold_val) 
             
             # myplot_data <- plot_data() %>% 
             #     filter(discs %in% input_discs) %>% 
@@ -147,11 +150,48 @@ req(source_data)
                 scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
                 geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
+                scale_y_continuous(labels = scales::percent_format()) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
         } 
         
-        # legend on/off ####
+        # 3. pecentages org ####
+        
+        if (input_pct_score_org == TRUE) { 
+            
+            myplot_data <- plot_data() %>% 
+                filter(discs %in% input_discs) %>% 
+                group_by(org) %>% 
+                mutate(n = n()) %>% 
+                group_by(org, discs) %>% 
+                filter(n >= input_threshold_val) %>% 
+                mutate(n = round((n/total_org), 3)) %>% 
+                distinct(org, discs, .keep_all = TRUE)  
+            
+            # myplot_data <- plot_data() %>% 
+            #     filter(discs %in% input_discs) %>% 
+            #     #filter(!duplicated(title)) %>% 
+            #     group_by(org) %>% 
+            #     count(discs)
+            
+            validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
+            
+            myplot <- myplot_data %>% 
+                ggplot(aes(x = reorder(factor(org), n), 
+                           y = n, 
+                           fill = discs,
+                           text = paste(org, "\n",
+                                        discs, "\n",
+                                        n))) +
+                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
+                geom_bar(stat = "identity", 
+                         position = position_dodge(preserve = "single")) +
+                scale_y_continuous(labels = scales::percent_format()) + #pct
+                labs(x = "", y = "", title = input_title) +
+                theme_select 
+        } 
+        
+        # 4. legend on/off ####
         if (legend_status == TRUE)  {
             myplot <- myplot +
                 theme(legend.title = element_blank())
@@ -160,7 +200,7 @@ req(source_data)
                 theme(legend.position="none") 
         } 
         
-        # flip on/off ####
+        # 5. flip on/off ####
         if (flip_status == TRUE)  {
             myplot <- myplot +
                 theme(axis.text.x = element_text(angle = 75, 
@@ -184,7 +224,7 @@ req(source_data)
                 filter(org %in% input_org) %>% 
                 group_by(org) %>% 
                 count(discs) %>% 
-                filter(n > input_threshold_val)
+                filter(n >= input_threshold_val)
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
@@ -202,15 +242,44 @@ req(source_data)
                 theme_select 
         } 
     
-        # 2. pecentages ####
+        # 2. pecentages score ####
     if (input_pct_score == TRUE) { 
             
             myplot_data <- plot_data() %>% 
                 filter(org %in% input_org) %>% 
                 group_by(org, discs) %>% 
-                mutate(n = round((n()/total_org_disc), 2)) %>% 
-                distinct(org, discs, .keep_all = TRUE) %>%  #pct 
-                filter(total_org_disc > input_threshold_val) 
+                mutate(n = n()) %>% 
+                filter(n >= input_threshold_val) %>% 
+                mutate(n = round(n/total_org_disc, 3)) %>% 
+                distinct(org, discs, .keep_all = TRUE) 
+            
+            validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
+            
+            myplot <- myplot_data %>% 
+                ggplot(aes(x = reorder(factor(discs), n), 
+                           y = n, 
+                           fill = org,
+                           text = paste(org, "\n",
+                                        discs, "\n",
+                                        n))) +
+                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
+                geom_bar(stat = "identity", 
+                         position = position_dodge(preserve = "single")) +
+                scale_y_continuous(labels = scales::percent_format()) + #pct
+                labs(x = "", y = "", title = input_title) +
+                theme_select 
+    } 
+        
+        # 3. pecentages org ####
+        if (input_pct_score_org == TRUE) { 
+            
+            myplot_data <- plot_data() %>% 
+                filter(org %in% input_org) %>% 
+                group_by(org, discs) %>% 
+                mutate(n = n()) %>% 
+                filter(n >= input_threshold_val) %>% 
+                mutate(n = round((n/total_org), 3)) %>% 
+                distinct(org, discs, .keep_all = TRUE) 
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
@@ -229,7 +298,7 @@ req(source_data)
                 theme_select 
         } 
         
-        # 3. legend on/off ####
+        # 4. legend on/off ####
         if (legend_status == TRUE)  {
             myplot <- myplot +
                 theme(legend.title = element_blank())
@@ -238,7 +307,7 @@ req(source_data)
                 theme(legend.position="none") 
         } 
         
-        # 4. flip on/off ####
+        # 5. flip on/off ####
         if (flip_status == TRUE)  {
             myplot <- myplot +
                 theme(axis.text.x = element_text(angle = 75, 
@@ -267,7 +336,7 @@ req(source_data)
                 #filter(!duplicated(title)) %>% 
                 group_by(org) %>% 
                 count(discs) %>% 
-                filter(n > input_threshold_val)
+                filter(n >= input_threshold_val)
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
@@ -287,7 +356,7 @@ req(source_data)
                 theme_select
         } 
         
-        # 2. pecentages ####
+        # 2. pecentages score ####
         if (input_pct_score == TRUE) { 
         
             myplot_data <- plot_data() %>% 
@@ -297,10 +366,11 @@ req(source_data)
                 group_by(org) %>% 
                 #count(discs) #%>% 
                 mutate(n = n()) %>% 
+                filter(n >= input_threshold_val) %>% 
                 group_by(org, discs) %>% 
-                mutate(n = round((n()/total_org_disc), 2)) %>% 
-                distinct(org, discs, .keep_all = TRUE) %>% #pct 
-                filter(total_org_disc > input_threshold_val)
+                mutate(n = round((n()/total_org_disc), 3)) %>% 
+                distinct(org, discs, .keep_all = TRUE) #pct 
+                
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
@@ -319,9 +389,40 @@ req(source_data)
                 theme_select
         }
         
+        # 3. pecentages org ####
+        if (input_pct_score_org == TRUE) { 
+            
+            myplot_data <- plot_data() %>% 
+                filter(org %in% input_org) %>%
+                filter(discs %in% input_discs) %>%
+                #filter(!duplicated(title)) %>% 
+                group_by(org) %>% 
+                #count(discs) #%>% 
+                mutate(n = n()) %>% 
+                filter(n >= input_threshold_val) %>% 
+                group_by(org, discs) %>% 
+                mutate(n = round((n()/total_org), 3)) %>% 
+                distinct(org, discs, .keep_all = TRUE)  #pct 
+                
+            
+            validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
+            
+            myplot <- myplot_data %>% 
+                ggplot(aes(x = reorder(factor(discs), n), 
+                           y = n, 
+                           fill = org,
+                           text = paste(org, "\n",
+                                        discs, "\n",
+                                        n))) +
+                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
+                geom_bar(stat = "identity", 
+                         position = position_dodge(preserve = "single")) +
+                scale_y_continuous(labels = scales::percent_format()) + #pct
+                labs(x = "", y = "", title = input_title) +
+                theme_select 
+        } 
         
-        
-        # 3. legend on/off ####
+        # 4. legend on/off ####
         if (legend_status == TRUE)  {
             myplot <- myplot +
                 theme(legend.title = element_blank())
@@ -330,7 +431,7 @@ req(source_data)
                 theme(legend.position="none") 
         } 
         
-        # 4. flip on/off ####
+        # 5. flip on/off ####
         if (flip_status == TRUE)  {
             myplot <- myplot +
                     theme(axis.text.x = element_text(angle = 75, 

@@ -43,6 +43,34 @@
         }
     })
     
+    # Input percentages ####
+    
+    
+     output$org_percentage <- renderUI({
+        
+ 
+            
+        materialSwitch(inputId = "flip_pct_org", 
+                       label = "",
+                       value = FALSE,
+                       status = "primary")
+    
+    })
+    
+    output$score_percentage <- renderUI({
+        
+            
+            
+            materialSwitch(inputId = "flip_pct_score", 
+                           label = "",
+                           value = FALSE,
+                           status = "primary")
+       
+        
+
+            })
+    
+    
     
     # create outputs for UI 
     
@@ -51,6 +79,9 @@
     
     # grab discipline input ####
     discs <- callModule(filterSelect, "discs")
+    
+    # grab percentage org switch ####
+    pct_score_org <- reactive({input$flip_pct_org})
     
     # grab percentiles ####
     
@@ -141,7 +172,8 @@
                             input_leg_val_X = leg_val_X(),
                             input_leg_val_Y = leg_val_Y(),
                             input_pct_score = as.logical(pct_score()),
-                            input_threshold_val = threshold_val()
+                            input_threshold_val = threshold_val(),
+                            input_pct_score_org = pct_score_org()
                             )
             })
             
