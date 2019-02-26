@@ -51,21 +51,37 @@ page1 <- tabPanel(
                     
                     wellPanel(uiOutput("data_controls"),
                               
-                              # Flip percentages for Orgs ####
-                              p("Percentages"),
-                              uiOutput("org_percentage")
-                              
-                              ),
+                    # Flip percentages for Orgs ####
+                    p("Percentages"),
+                    uiOutput("org_percentage"),
+                    
+                    bsPopover(id = "org_percentage", 
+                              title = "", 
+                              content = "100 % = sum of results per organization/discipline",
+                              placement = "right", 
+                              trigger = "hover",
+                              options = list(container = "body",
+                                   delay = 600))
+                             
+                     ),
                     
                     
                     wellPanel(
                     # Input AIS/SJR score ####
                     
-                    uiOutput("score"),
+                    uiOutput("score", label = "???"),
                     
                     # Flip percentages for AIS/SJR ####
-                    p("Percentages"),
+                    p("Percentages ", 
+                    bsButton("q1", 
+                             label = "?", 
+                             style = "primary",
+                             size = "extra-small")),
+
                     uiOutput("score_percentage")
+
+                    
+                    
                     
                     ),
 
@@ -100,7 +116,7 @@ page1 <- tabPanel(
                     
                     
                     # Output plotly ####
-                    uiOutput("plotui")#,
+                    uiOutput("plotui") %>% withSpinner()#,
                     #plotlyOutput("plot")
                     
                     

@@ -49,22 +49,43 @@
      output$org_percentage <- renderUI({
         
  
-            
-        materialSwitch(inputId = "flip_pct_org", 
-                       label = "",
-                       value = FALSE,
-                       status = "primary")
+         
+         if (isTruthy(pct_score()) && pct_score() == TRUE) {
+             
+             materialSwitch(inputId = "flip_pct_org", 
+                            label = "",
+                            value = FALSE,
+                            status = "primary") 
+           
+         } else {
+         
+             materialSwitch(inputId = "flip_pct_org", 
+                            label = "",
+                            value = FALSE,
+                            status = "primary") 
+         }
     
     })
     
     output$score_percentage <- renderUI({
         
             
+        if (isTruthy(pct_score_org()) && pct_score_org() == TRUE) {
+
+                materialSwitch(inputId = "flip_pct_score", 
+                               label = "",
+                               value = FALSE,
+                               status = "primary")
+                       
+        } else {
             
             materialSwitch(inputId = "flip_pct_score", 
                            label = "",
                            value = FALSE,
                            status = "primary")
+        }
+            
+           
        
         
 
