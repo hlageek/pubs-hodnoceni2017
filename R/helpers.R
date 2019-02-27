@@ -134,23 +134,19 @@ data %>%
 }
 ####
 
-# Estimate percentile ####
-
-ecdf_fun <- function(x,perc) ecdf(x)(perc)
-
- 
-# filterData <-  reactive({ function(dataset,
-#                      from_year, 
-#                      to_year, 
-#                      discipline, 
-#                      output_type)  {
-#     
-#     dataset <- dataset %>%
-#       filter(riv_year >= from_year & riv_year <= to_year) %>%
-#       filter(., disc %in% discipline()) %>%
-#       filter(., output_type %in% output_type()) %>%
-#       count(riv_year) 
-#       }
-# })
+# help popup ####
+# https://github.com/daattali/advanced-shiny/blob/master/busy-indicator/helpers.R
+# Create a little question mark link that shows a help popup on hover
+helpPopup <- function(content, title = NULL) {
+    a(href = "#",
+      class = "popover-link",
+      `data-toggle` = "popover",
+      `data-title` = title,
+      `data-content` = content,
+      `data-html` = "true",
+      `data-trigger` = "hover",
+      icon("question-circle")
+    )
+}
   
 

@@ -9,6 +9,7 @@ require(markdown)
 require(shinycssloaders)
 require(plotly)
 require(shinyWidgets)
+require(shinyBS)
 
 national_results <- feather::read_feather("../data/processed/national_results.feather")
 journals <- feather::read_feather("../data/processed/journals.feather")

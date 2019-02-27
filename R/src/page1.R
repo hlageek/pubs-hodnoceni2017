@@ -5,17 +5,16 @@ page1 <- tabPanel(
         
         
         # TITLE AND HEADER PANEL FOR PAGE ####
-        titlePanel(title = "Czech R&D Evaluation 2017"),
+        titlePanel(title = "Evalvis 17+"),
         # Main panel name
         #headerPanel(h4("Visual guide")),
         #tags$br(),
         tags$br(),
+        
         p(
-            a("Bibliometric evaluation of Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"),
-            "is a primary source of information on the results of Czech science. It is not, strictly speaking, a bibliographical database. Its basic unit of analysis is a",
-            tags$b("result"),
-            ",",
-            "i.e. various types of outcomes of basic and applied research supported with public expenditures."
+            
+            "Charting application for the data from the ", a("bibliometric evaluation of the Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"), " at an organization level in 2017."
+            
         ),
         # Header title
         
@@ -30,7 +29,8 @@ page1 <- tabPanel(
                     # start columns 1-3
                     
                     # Left sidebar panel description
-                    h4("Data controls"),
+                    h4(""),
+                    #h4("Data controls"),
                     tags$br(),
                     ("Filter displayed data"),
                     tags$br(),
@@ -49,14 +49,66 @@ page1 <- tabPanel(
                     # called by Shiny module via helpers 
                     # Last argument draws a set of possible values from the data file
                     
-                    wellPanel(uiOutput("data_controls")),
+                    wellPanel(
+                              
+                   
+                    
+                    uiOutput("data_controls")
+                    
+
+                             
+                     ),
                     
                     
-                    
+                    wellPanel(
                     # Input AIS/SJR score ####
                     
                     uiOutput("score"),
-                    textOutput("test")
+                    
+                    # Flip percentages for AIS/SJR ####
+                    p("Percentages ", 
+                    bsButton("q2", 
+                             label = "?", 
+                             style = "primary",
+                             size = "extra-small")),
+                    
+                    bsPopover(id = "q2", 
+                              title = "", 
+                              content = "Percentages represent a share of results in selected percentile range from the sum of all results in each discipline and organization.",
+                              placement = "right", 
+                              trigger = "click",
+                              options = list(container = "body")),
+
+                    uiOutput("score_percentage")
+
+                    
+                    
+                    
+                    ),
+
+                    
+                    # Set threshold for displayed data ####
+                    
+                    p("Set minimum count",
+                    bsButton("q3", 
+                             label = "?", 
+                             style = "primary",
+                             size = "extra-small")),
+            
+            bsPopover(id = "q3", 
+                      title = "", 
+                      content = "Minimum number of results an organization should have in the (selected) discipline and the (selected) percentile range in order to be included in the analysis. Note that this filter takes effect prior to percentage calculations and may, therefore, exclude organizations with low number of results despite their relevance in selected disciplines.",
+                      placement = "right", 
+                      trigger = "click",
+                      options = list(container = "body")),
+            
+                    numericInput(inputId = "threshold",
+                                 label = "",
+                                 value = 0,
+                                 min = 0,
+                                 step = 1)
+                    
+                    
                     
             ), # end columns 1-2
             
@@ -68,15 +120,17 @@ page1 <- tabPanel(
                     # start columns 3-10
                     
                     # Middle panel title
-                    (div(h4("Visualization"), align = "center")),
+                    (div(h4("Chart"), align = "center")),
                     tags$br(),
+   
                     
                     # Output text ####
-                    textOutput("out_org"),
+                    #textOutput("out_org"),
+                    #textOutput("leg_val"),
                     
                     
                     # Output plotly ####
-                    uiOutput("plotui")#,
+                    uiOutput("plotui") %>% withSpinner()#,
                     #plotlyOutput("plot")
                     
                     
@@ -88,7 +142,8 @@ page1 <- tabPanel(
                     2,
                     
                     # Right sidedebar panel description
-                    h4("Visualization controls"),
+                    #h4("Visualization controls"),
+                    h4(""),
                     tags$br(),
                     ("Adjust visualizations"),
                     tags$br(),
@@ -101,6 +156,17 @@ page1 <- tabPanel(
                         actionButton(inputId = "update_plot_title", 
                                      label =  "Update plot title")),
                     
+                    # Show legend ####
+                    wellPanel(
+                    p(strong("Legend")),
+                    materialSwitch(inputId = "legend", 
+                                   label = "",
+                                   value = FALSE,
+                                   status = "primary"),
+                    
+                    uiOutput("adjust_leg_X"),
+                    uiOutput("adjust_leg_Y")
+                    ),
                     # Input ggplot2 theme  ####
                     # via Shiny module in helpers
                     # Arguments take choices and default value
@@ -111,8 +177,17 @@ page1 <- tabPanel(
                     
                     
                     # Input plot size ####
-                    wellPanel(singleSelectUI("plot_size", "Resize plot", c(as.character(seq(200, 1200, 100)), "auto"), "auto"))
+                    wellPanel(singleSelectUI("plot_size", "Resize plot", c(as.character(seq(200, 1200, 100)), "auto"), "auto")),
                     
+                    
+                    
+                    # Flip axes ####
+                    
+                    p("Flip  perspective"),
+                    materialSwitch(inputId = "flip", 
+                                   label = "",
+                                   value = FALSE,
+                                   status = "primary")
                     
             ) # end columns 10-12
             
