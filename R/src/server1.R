@@ -9,10 +9,12 @@
     source_data <- reactive({national_results  %>% 
             filter(segment == data_source()) %>% 
                        # this segment could be moved to processed data rather than on the fly
-        group_by(discs, org) %>% 
+            group_by(discs, org) %>% 
             mutate(total_org_disc = n()) %>% 
             group_by(org) %>% 
             mutate(total_org = n()) %>%
+            group_by(discs) %>% 
+            mutate(total_disc = n()) %>% 
             ungroup()
                        })
     
@@ -21,8 +23,35 @@
     output$data_controls <- renderUI({
         
         tagList(
-            filterSelectUI("org", label = "Select organization", source_data()$org),
             
+        # Select organization 
+            
+            filterSelectUI("org", label = "Select organization", source_data()$org),
+           
+        # Flip percentages for Orgs 
+           p("Percentages ", 
+              bsButton("q1", 
+                       label = "?", 
+                       style = "primary",
+                       size = "extra-small")),
+            
+            bsPopover(id = "q1", 
+                      title = "", 
+                      content = "Percentages represent a share of results in a discipline from the sum of results in an organization.",
+                      placement = "right", 
+                      trigger = "click",
+                      options = list(container = "body")),
+
+                
+
+                     materialSwitch(inputId = "flip_pct_org",
+                                    label = "",
+                                    value = FALSE,
+                                    status = "primary"),
+
+       
+        # Select discipline 
+        
             filterSelectUI("discs", label = "Select discipline", source_data()$discs)
         )
     })
@@ -46,44 +75,44 @@
     # Input percentages ####
     
     
-     output$org_percentage <- renderUI({
-        
- 
-         
-         if (isTruthy(pct_score()) && pct_score() == TRUE) {
-             
-             materialSwitch(inputId = "flip_pct_org", 
-                            label = "",
-                            value = FALSE,
-                            status = "primary") 
-           
-         } else {
-         
-             materialSwitch(inputId = "flip_pct_org", 
-                            label = "",
-                            value = FALSE,
-                            status = "primary") 
-         }
-    
-    })
+    #  output$org_percentage <- renderUI({
+    #     
+    # 
+    #      
+    #      if (isTruthy(pct_score()) && pct_score() == TRUE) {
+    #          
+    #          materialSwitch(inputId = "flip_pct_org", 
+    #                         label = "",
+    #                         value = FALSE,
+    #                         status = "primary") 
+    #        
+    #      } else {
+    #      
+    #          materialSwitch(inputId = "flip_pct_org", 
+    #                         label = "",
+    #                         value = FALSE,
+    #                         status = "primary") 
+    #      }
+    # 
+    # })
     
     output$score_percentage <- renderUI({
         
             
-        if (isTruthy(pct_score_org()) && pct_score_org() == TRUE) {
+        # if (isTruthy(pct_score_org()) && pct_score_org() == TRUE) {
 
                 materialSwitch(inputId = "flip_pct_score", 
                                label = "",
                                value = FALSE,
                                status = "primary")
                        
-        } else {
-            
-            materialSwitch(inputId = "flip_pct_score", 
-                           label = "",
-                           value = FALSE,
-                           status = "primary")
-        }
+        # # } else {
+        #     
+        #     materialSwitch(inputId = "flip_pct_score", 
+        #                    label = "",
+        #                    value = FALSE,
+        #                    status = "primary")
+        # # }
             
            
        

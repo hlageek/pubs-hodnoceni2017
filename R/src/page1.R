@@ -49,19 +49,13 @@ page1 <- tabPanel(
                     # called by Shiny module via helpers 
                     # Last argument draws a set of possible values from the data file
                     
-                    wellPanel(uiOutput("data_controls"),
+                    wellPanel(
                               
-                    # Flip percentages for Orgs ####
-                    p("Percentages"),
-                    uiOutput("org_percentage"),
+                   
                     
-                    bsPopover(id = "org_percentage", 
-                              title = "", 
-                              content = "100 % = sum of results per organization/discipline",
-                              placement = "right", 
-                              trigger = "hover",
-                              options = list(container = "body",
-                                   delay = 600))
+                    uiOutput("data_controls")
+                    
+
                              
                      ),
                     
@@ -69,14 +63,21 @@ page1 <- tabPanel(
                     wellPanel(
                     # Input AIS/SJR score ####
                     
-                    uiOutput("score", label = "???"),
+                    uiOutput("score"),
                     
                     # Flip percentages for AIS/SJR ####
                     p("Percentages ", 
-                    bsButton("q1", 
+                    bsButton("q2", 
                              label = "?", 
                              style = "primary",
                              size = "extra-small")),
+                    
+                    bsPopover(id = "q2", 
+                              title = "", 
+                              content = "Percentages represent a share of results in selected percentile range from the sum of all results in each discipline and organization.",
+                              placement = "right", 
+                              trigger = "click",
+                              options = list(container = "body")),
 
                     uiOutput("score_percentage")
 
@@ -88,8 +89,21 @@ page1 <- tabPanel(
                     
                     # Set threshold for displayed data ####
                     
+                    p("Set minimum count",
+                    bsButton("q3", 
+                             label = "?", 
+                             style = "primary",
+                             size = "extra-small")),
+            
+            bsPopover(id = "q3", 
+                      title = "", 
+                      content = "Minimum number of results an organization should have in the (selected) discipline and the (selected) percentile range in order to be included in the analysis. Note that this filter takes effect prior to percentage calculations and may, therefore, exclude organizations with low number of results despite their relevance in selected disciplines.",
+                      placement = "right", 
+                      trigger = "click",
+                      options = list(container = "body")),
+            
                     numericInput(inputId = "threshold",
-                                 label = "Set minimum count",
+                                 label = "",
                                  value = 0,
                                  min = 0,
                                  step = 1)

@@ -68,7 +68,7 @@ req(source_data) # check if source is selected
                     ungroup()
       
                 } else {
-                    source_data }
+                    source_data  }
             } 
        else if (!is.na(source_data$sjr[1])) { # filter SJR for SCOPUS data
            
@@ -79,11 +79,11 @@ req(source_data) # check if source is selected
                    left_join(quantiles_scopus(), by = "discs") %>% 
                    group_by(discs) %>% 
                    filter(sjr > minq & sjr <= maxq) %>% 
-                   ungroup()
+                   ungroup() 
                    
                    
                } else {
-                   source_data }
+                   source_data  }
            }
     })
     
@@ -100,12 +100,20 @@ req(source_data) # check if source is selected
             #filter(!duplicated(title)) %>% 
             group_by(org) %>% 
             count(discs) %>% 
-            filter(n >= input_threshold_val)
+          filter(n >= input_threshold_val)
         
         validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
         
+        if (flip_status == TRUE) {
+          
+          x <- quote(reorder(factor(org), desc(n)))
+          
+        } else {
+          x <- quote(reorder(factor(org), n))
+        }
+        
         myplot <- myplot_data %>% 
-            ggplot(aes(x = reorder(factor(org), n), 
+            ggplot(aes(x = eval(x), 
                        y = n, 
                        fill = discs,
                        text = paste(org, "\n",
@@ -124,13 +132,11 @@ req(source_data) # check if source is selected
             
             myplot_data <- plot_data() %>% 
                 filter(discs %in% input_discs) %>% 
-                group_by(org) %>% 
-                mutate(n = n()) %>% 
                 group_by(org, discs) %>% 
+                mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
-                mutate(n = round((n()/total_org_disc), 3)) %>% 
-                distinct(org, discs, .keep_all = TRUE) %>% #pct 
-                filter(total_org_disc >= input_threshold_val) 
+                mutate(pct = round((n()/total_org_disc), 3)) %>% 
+                distinct(org, discs, .keep_all = TRUE) 
             
             # myplot_data <- plot_data() %>% 
             #     filter(discs %in% input_discs) %>% 
@@ -140,17 +146,25 @@ req(source_data) # check if source is selected
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
+            if (flip_status == TRUE) {
+              
+              x <- quote(reorder(factor(org), desc(pct)))
+              
+            } else {
+              x <- quote(reorder(factor(org), pct))
+            }
+            
             myplot <- myplot_data %>% 
-                ggplot(aes(x = reorder(factor(org), n), 
-                           y = n, 
+                ggplot(aes(x = eval(x), 
+                           y = pct, 
                            fill = discs,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        n))) +
+                                        pct))) +
                 scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
                 geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
-                scale_y_continuous(labels = scales::percent_format()) + #pct
+                scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
         } 
@@ -161,32 +175,34 @@ req(source_data) # check if source is selected
             
             myplot_data <- plot_data() %>% 
                 filter(discs %in% input_discs) %>% 
-                group_by(org) %>% 
-                mutate(n = n()) %>% 
                 group_by(org, discs) %>% 
+                mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
-                mutate(n = round((n/total_org), 3)) %>% 
+                mutate(pct = round((n/total_org), 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE)  
             
-            # myplot_data <- plot_data() %>% 
-            #     filter(discs %in% input_discs) %>% 
-            #     #filter(!duplicated(title)) %>% 
-            #     group_by(org) %>% 
-            #     count(discs)
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
+            if (flip_status == TRUE) {
+              
+              x <- quote(reorder(factor(org), desc(pct)))
+              
+            } else {
+              x <- quote(reorder(factor(org), pct))
+            }
+            
             myplot <- myplot_data %>% 
-                ggplot(aes(x = reorder(factor(org), n), 
-                           y = n, 
+                ggplot(aes(x = eval(x), 
+                           y = pct, 
                            fill = discs,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        n))) +
+                                        pct))) +
                 scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
                 geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
-                scale_y_continuous(labels = scales::percent_format()) + #pct
+                scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
         } 
@@ -224,12 +240,20 @@ req(source_data) # check if source is selected
                 filter(org %in% input_org) %>% 
                 group_by(org) %>% 
                 count(discs) %>% 
-                filter(n >= input_threshold_val)
+              filter(n >= input_threshold_val) 
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
+            if (flip_status == TRUE) {
+              
+              x <- quote(reorder(factor(discs), desc(n)))
+              
+            } else {
+              x <- quote(reorder(factor(discs), n))
+            }
+            
             myplot <- myplot_data %>% 
-                ggplot(aes(x = reorder(factor(discs), n), 
+                ggplot(aes(x = eval(x), 
                            y = n, 
                            fill = org,
                            text = paste(org, "\n",
@@ -250,22 +274,30 @@ req(source_data) # check if source is selected
                 group_by(org, discs) %>% 
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
-                mutate(n = round(n/total_org_disc, 3)) %>% 
+                mutate(pct = round(n/total_org_disc, 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE) 
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
+            if (flip_status == TRUE) {
+              
+              x <- quote(reorder(factor(discs), desc(pct)))
+              
+            } else {
+              x <- quote(reorder(factor(discs), pct))
+            }
+            
             myplot <- myplot_data %>% 
-                ggplot(aes(x = reorder(factor(discs), n), 
-                           y = n, 
+                ggplot(aes(x = eval(x), 
+                           y = pct, 
                            fill = org,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        n))) +
+                                        pct))) +
                 scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
                 geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
-                scale_y_continuous(labels = scales::percent_format()) + #pct
+                scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
     } 
@@ -278,22 +310,31 @@ req(source_data) # check if source is selected
                 group_by(org, discs) %>% 
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
-                mutate(n = round((n/total_org), 3)) %>% 
+                mutate(pct = round((n/total_org), 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE) 
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
+            
+            if (flip_status == TRUE) {
+              
+              x <- quote(reorder(factor(discs), desc(pct)))
+              
+            } else {
+              x <- quote(reorder(factor(discs), pct))
+            }
+            
             myplot <- myplot_data %>% 
-                ggplot(aes(x = reorder(factor(discs), n), 
-                           y = n, 
+                ggplot(aes(x = eval(x), 
+                           y = pct, 
                            fill = org,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        n))) +
+                                        pct))) +
                 scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
                 geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
-                scale_y_continuous(labels = scales::percent_format()) + #pct
+                scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
         } 
@@ -336,14 +377,22 @@ req(source_data) # check if source is selected
                 #filter(!duplicated(title)) %>% 
                 group_by(org) %>% 
                 count(discs) %>% 
-                filter(n >= input_threshold_val)
-            
+                filter(n >= input_threshold_val) 
+
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
+            if (flip_status == TRUE) {
+              
+              x <- quote(reorder(factor(org), desc(n)))
+              
+            } else {
+              x <- quote(reorder(factor(org), n))
+            }
+            
             myplot <- myplot_data %>% 
-                ggplot(aes(x = reorder(factor(discs), n), 
+                ggplot(aes(x = eval(x), 
                            y = n, 
-                           fill = org,
+                           fill = discs,
                            text = paste(org, "\n",
                                         discs, "\n",
                                         n))) +
@@ -363,28 +412,34 @@ req(source_data) # check if source is selected
                 filter(org %in% input_org) %>%
                 filter(discs %in% input_discs) %>%
                 #filter(!duplicated(title)) %>% 
-                group_by(org) %>% 
-                #count(discs) #%>% 
+                group_by(org, discs) %>%  
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
-                group_by(org, discs) %>% 
-                mutate(n = round((n()/total_org_disc), 3)) %>% 
+                mutate(pct = round((n()/total_org_disc), 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE) #pct 
                 
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
+            if (flip_status == TRUE) {
+              
+              x <- quote(reorder(factor(org), desc(pct)))
+              
+            } else {
+              x <- quote(reorder(factor(org), pct))
+            }
+            
             myplot <- myplot_data %>% 
-                ggplot(aes(x = reorder(factor(discs), n), 
-                           y = n, 
-                           fill = org,
+                ggplot(aes(x = eval(x), 
+                           y = pct, 
+                           fill = discs,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        n))) +
+                                        pct))) +
                 scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
                 geom_bar(stat = "identity",
                          position = position_dodge(preserve = "single")) +
-                scale_y_continuous(labels = scales::percent_format()) + #pct
+                scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select
         }
@@ -396,28 +451,34 @@ req(source_data) # check if source is selected
                 filter(org %in% input_org) %>%
                 filter(discs %in% input_discs) %>%
                 #filter(!duplicated(title)) %>% 
-                group_by(org) %>% 
-                #count(discs) #%>% 
+                group_by(org, discs) %>% 
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
-                group_by(org, discs) %>% 
-                mutate(n = round((n()/total_org), 3)) %>% 
+                mutate(pct = round((n()/total_org), 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE)  #pct 
                 
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
+            if (flip_status == TRUE) {
+              
+              x <- quote(reorder(factor(org), desc(pct)))
+              
+            } else {
+              x <- quote(reorder(factor(org), pct))
+            }
+            
             myplot <- myplot_data %>% 
-                ggplot(aes(x = reorder(factor(discs), n), 
-                           y = n, 
-                           fill = org,
+                ggplot(aes(x = eval(x), 
+                           y = pct, 
+                           fill = discs,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        n))) +
+                                        pct))) +
                 scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
                 geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
-                scale_y_continuous(labels = scales::percent_format()) + #pct
+                scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
         } 
