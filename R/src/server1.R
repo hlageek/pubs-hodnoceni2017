@@ -24,9 +24,13 @@
         
         tagList(
             
+           
+            
         # Select organization 
             
-            filterSelectUI("org", label = "Select organization", source_data()$org),
+        
+        
+            filterSelectUI("org", label = "Select organization", sort(unique(source_data()$org))),
            
         # Flip percentages for Orgs 
            p("Percentages ", 
@@ -52,7 +56,7 @@
        
         # Select discipline 
         
-            filterSelectUI("discs", label = "Select discipline", source_data()$discs)
+            filterSelectUI("discs", label = "Select discipline", sort(unique(source_data()$discs)))
         )
     })
     

@@ -1,5 +1,5 @@
 page1 <- tabPanel(
-    "Bibliometric data",
+    "Evalvis 17+",
     fluidPage(
         theme = shinytheme("united"),
         
@@ -13,7 +13,7 @@ page1 <- tabPanel(
         
         p(
             
-            "Charting application for the data from the ", a("bibliometric evaluation of the Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"), " at an organization level in 2017."
+            "Charting application for the data from the ", a("bibliometric evaluation of the Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"), " of research organisations in 2017."
             
         ),
         # Header title
@@ -74,7 +74,7 @@ page1 <- tabPanel(
                     
                     bsPopover(id = "q2", 
                               title = "", 
-                              content = "Percentages represent a share of results in selected percentile range from the sum of all results in each discipline and organization.",
+                              content = "Percentages represent a share of results in the selected percentile range from the sum of all results in each discipline and organization.",
                               placement = "right", 
                               trigger = "click",
                               options = list(container = "body")),

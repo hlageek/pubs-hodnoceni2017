@@ -51,13 +51,21 @@ sliderInteger <- function(input, output, session) {
 filterSelectUI <- function(id, label, filtervar) {
   ns <- NS(id)
   tagList(
-    selectInput( # Input control - disciplines selector
+    pickerInput( # Input control - disciplines selector
       ns("filter_text"),
-      label,
-      unique(filtervar),
+      label = label,
+      choices = filtervar,
       selected = "",
-      multiple = T
+      multiple = TRUE,
+      options = pickerOptions(
+        liveSearch = TRUE,
+        actionsBox = TRUE,
+        style = "primary; .selected {background-color:gray !important;}"
+        )
     )) }
+
+
+
 
 filterSelect <- function(input, output, session) {
   reactive({input$filter_text})

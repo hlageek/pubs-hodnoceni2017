@@ -1,1 +1,24 @@
 ## Test
+
+
+![Step 1](step1.jpg)
+
+
+
+something new
+
+![Step 2](step2.jpg)
+
+dalsi
+![Step 3](step3.jpg)
+
+![Step 4](step4.jpg)
+
+![Step 5](step5.jpg)
+
+![Step 6](step6.jpg)
+
+![Step 7](step7.jpg)
+
+![Step 7](step8.jpg)
+
