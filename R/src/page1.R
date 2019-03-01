@@ -76,7 +76,7 @@ page1 <- tabPanel(
                               title = "", 
                               content = "Percentages represent a share of results in the selected percentile range from the sum of all results in each discipline and organization.",
                               placement = "right", 
-                              trigger = "click",
+                              trigger = "hover",
                               options = list(container = "body")),
 
                     uiOutput("score_percentage")
@@ -99,7 +99,7 @@ page1 <- tabPanel(
                       title = "", 
                       content = "Minimum number of results an organization should have in the (selected) discipline and the (selected) percentile range in order to be included in the analysis. Note that this filter takes effect prior to percentage calculations and may, therefore, exclude organizations with low number of results despite their relevance in selected disciplines.",
                       placement = "right", 
-                      trigger = "click",
+                      trigger = "hover",
                       options = list(container = "body")),
             
                     numericInput(inputId = "threshold",
@@ -194,10 +194,14 @@ page1 <- tabPanel(
         ),
         # fluid-row 1 end
         
-        
+
         # FOOTER ####
-        hr(),
-        HTML('<p align = "right">Contact: hladik at flu.cas.cz</p>')#,
+        #hr(),
+        #HTML('<div style="background-color:#e95420;">'),
+        includeMarkdown("www/footer.Rmd")#,
+        #HTML('</div>')
+        #HTML('<p align = "right">Contact: hladik at flu.cas.cz</p>')#,
+
         # h5(textOutput("counter")) # Counter display
         
     ) # fluid-page end

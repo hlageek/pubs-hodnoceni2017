@@ -18,7 +18,10 @@ shinyUI(
 tabPanel("About",
          fluidPage(
              
-             includeMarkdown("www/about.Rmd")
+             includeMarkdown("www/about.Rmd"),
+             #hr(),
+             
+             includeMarkdown("www/footer.Rmd")
              
          )) # tabpanel end# tabpanel end
 ) #end navbar page

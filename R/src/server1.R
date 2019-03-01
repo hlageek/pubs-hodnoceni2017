@@ -43,7 +43,7 @@
                       title = "", 
                       content = "Percentages represent a share of results in a discipline from the sum of results in an organization.",
                       placement = "right", 
-                      trigger = "click",
+                      trigger = "hover",
                       options = list(container = "body")),
 
                 

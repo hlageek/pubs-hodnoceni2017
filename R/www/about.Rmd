@@ -1,24 +1,74 @@
-## Test
+## About
 
+
+
+
+#### Current release
+version 0.1.1 (March 2019)
+
+## Tutorial 
+
+The tutorial will guide you through the process of analysing 
+the structure of results in a particular discipline 
+for the five organizations with the highest output.
+
+1. [Selecting data](#selecting-data)
+2. [Adjusting displayed chart](#adjusting-displayed-chart)
+3. [Applying filters to data](#applying-filters)
+4. [Changing units and combining data](#changing-units)
+5. [Filtering data by AIS/SJR scores for each discipline](#filtering-data-by-score)
+6. [Changing percentile ranges](#percentile-range)
+7. [Theme selection](#theme-selection)
+8. [Adding custom title and flipping chart perspective](#adding-custom-title)
+
+<br><br>
+
+#### Selecting data  
+<a name="selecting-data"></a>
 
 ![Step 1](step1.jpg)
-
-
-
-something new
+***
+#### Adjusting displayed chart  
+<a name="adjusting-displayed-chart"></a>
 
 ![Step 2](step2.jpg)
+***
 
-dalsi
+#### Applying filters to data 
+<a name="applying-filters"></a>
+
+
+
 ![Step 3](step3.jpg)
+***
+
+#### Changing units and combining data 
+<a name="changing-units"></a>
 
 ![Step 4](step4.jpg)
+***
+
+#### Filtering data by AIS/SJR scores for each discipline 
+<a name="filtering-data-by-score"></a>
 
 ![Step 5](step5.jpg)
+***
+
+#### Changing percentile ranges 
+<a name="percentile-range"></a>
 
 ![Step 6](step6.jpg)
+***
+
+#### Adjusting chart by theme selection 
+<a name="theme-selection"></a>
 
 ![Step 7](step7.jpg)
+***
+
+#### Adding custom title and flipping chart perspective
+<a name="adding-custom-title"></a>
 
 ![Step 7](step8.jpg)
+
 
