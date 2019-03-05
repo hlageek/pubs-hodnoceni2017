@@ -78,64 +78,46 @@
     
     # Input percentages ####
     
-    
-    #  output$org_percentage <- renderUI({
-    #     
-    # 
-    #      
-    #      if (isTruthy(pct_score()) && pct_score() == TRUE) {
-    #          
-    #          materialSwitch(inputId = "flip_pct_org", 
-    #                         label = "",
-    #                         value = FALSE,
-    #                         status = "primary") 
-    #        
-    #      } else {
-    #      
-    #          materialSwitch(inputId = "flip_pct_org", 
-    #                         label = "",
-    #                         value = FALSE,
-    #                         status = "primary") 
-    #      }
-    # 
-    # })
-    
     output$score_percentage <- renderUI({
         
             
-        # if (isTruthy(pct_score_org()) && pct_score_org() == TRUE) {
 
                 materialSwitch(inputId = "flip_pct_score", 
                                label = "",
                                value = FALSE,
                                status = "primary")
-                       
-        # # } else {
-        #     
-        #     materialSwitch(inputId = "flip_pct_score", 
-        #                    label = "",
-        #                    value = FALSE,
-        #                    status = "primary")
-        # # }
-            
-           
-       
-        
 
             })
     
+# Input axes ####
+
     
+    output$flip_axes <- renderUI({
+        condition1 <- callModule(filterSelect, "org")
+        condition2 <- callModule(filterSelect, "discs")
+        if (length(condition1()) > 0 && length(condition2()) > 0) {
+            
+            p("Flip axes", 
+              materialSwitch(inputId = "axes", 
+                           label = "",
+                           value = FALSE,
+                           status = "primary")
+              )} 
+    })
     
     # create outputs for UI 
     
     # grab organization input ####
     org <- callModule(filterSelect, "org")
-    
+
     # grab discipline input ####
     discs <- callModule(filterSelect, "discs")
-    
+
     # grab percentage org switch ####
     pct_score_org <- reactive({input$flip_pct_org})
+    
+    # grab axes switch ####
+    axes_status <- reactive({input$axes})
     
     # grab percentiles ####
     
@@ -227,7 +209,8 @@
                             input_leg_val_Y = leg_val_Y(),
                             input_pct_score = as.logical(pct_score()),
                             input_threshold_val = threshold_val(),
-                            input_pct_score_org = pct_score_org()
+                            input_pct_score_org = pct_score_org(),
+                            input_axes = axes_status()
                             )
             })
             

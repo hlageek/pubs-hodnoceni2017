@@ -53,11 +53,13 @@ page1 <- tabPanel(
                               
                    
                     
-                    uiOutput("data_controls")
+                    uiOutput("data_controls"),
                     
-
-                             
+                    uiOutput("flip_axes")
+                    
                      ),
+
+                    
                     
                     
                     wellPanel(
