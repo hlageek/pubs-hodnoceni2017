@@ -121,8 +121,9 @@ req(source_data) # check if source is selected
                        text = paste(org, "\n",
                                     discs, "\n",
                                     n))) +
-            scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-            geom_bar(stat = "identity", 
+          {if (n_distinct(myplot_data$discs) < 10) {
+            scale_fill_brewer(type = "qual", palette = "Set1") }} +
+          geom_bar(stat = "identity", 
                      position = position_dodge(preserve = "single")) +
             labs(x = "", y = "", title = input_title) +
             theme_select 
@@ -163,8 +164,9 @@ req(source_data) # check if source is selected
                            text = paste(org, "\n",
                                         discs, "\n",
                                         pct))) +
-                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-                geom_bar(stat = "identity", 
+              {if (n_distinct(myplot_data$discs) < 10) {
+                scale_fill_brewer(type = "qual", palette = "Set1") }} +
+              geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
@@ -201,8 +203,9 @@ req(source_data) # check if source is selected
                            text = paste(org, "\n",
                                         discs, "\n",
                                         pct))) +
-                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-                geom_bar(stat = "identity", 
+              {if (n_distinct(myplot_data$discs) < 10) {
+                scale_fill_brewer(type = "qual", palette = "Set1") }} +
+              geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
@@ -263,8 +266,9 @@ req(source_data) # check if source is selected
                            text = paste(org, "\n",
                                         discs, "\n",
                                         n))) +
-                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-                geom_bar(stat = "identity", 
+              {if (n_distinct(myplot_data$org) < 10) {
+                scale_fill_brewer(type = "qual", palette = "Set1") }} +
+              geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
@@ -298,8 +302,9 @@ req(source_data) # check if source is selected
                            text = paste(org, "\n",
                                         discs, "\n",
                                         pct))) +
-                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-                geom_bar(stat = "identity", 
+              {if (n_distinct(myplot_data$org) < 10) {
+                scale_fill_brewer(type = "qual", palette = "Set1") }} +
+              geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
@@ -335,8 +340,9 @@ req(source_data) # check if source is selected
                            text = paste(org, "\n",
                                         discs, "\n",
                                         pct))) +
-                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-                geom_bar(stat = "identity", 
+              {if (n_distinct(myplot_data$org) < 10) {
+                scale_fill_brewer(type = "qual", palette = "Set1") }} +
+              geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
@@ -382,6 +388,7 @@ req(source_data) # check if source is selected
                 group_by(org) %>% 
                 count(discs) %>% 
                 filter(n >= input_threshold_val) 
+            
 
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
@@ -400,7 +407,8 @@ req(source_data) # check if source is selected
                            text = paste(org, "\n",
                                         discs, "\n",
                                         n))) +
-                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
+              {if (n_distinct(myplot_data$discs) < 10) {
+                scale_fill_brewer(type = "qual", palette = "Set1") }} +
                 geom_bar(stat = "identity",
                          position = position_dodge(preserve = "single")) +
                 # geom_bar(stat = "identity",
@@ -440,8 +448,9 @@ req(source_data) # check if source is selected
                            text = paste(org, "\n",
                                         discs, "\n",
                                         pct))) +
-                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-                geom_bar(stat = "identity",
+              {if (n_distinct(myplot_data$discs) < 10) {
+                scale_fill_brewer(type = "qual", palette = "Set1") }} +
+              geom_bar(stat = "identity",
                          position = position_dodge(preserve = "single")) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
@@ -479,8 +488,9 @@ req(source_data) # check if source is selected
                            text = paste(org, "\n",
                                         discs, "\n",
                                         pct))) +
-                scale_fill_brewer(type = "qual", palette = "Set1", direction = 1) +
-                geom_bar(stat = "identity", 
+              {if (n_distinct(myplot_data$discs) < 10) {
+                scale_fill_brewer(type = "qual", palette = "Set1") }} +
+              geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
