@@ -2,7 +2,7 @@ library(plotly)
 library(shiny)
 
 # setwd("/opt/shiny-server/samples/sample-apps/rivviz") 
-options(shiny.sanitize.errors = T)
+options(shiny.sanitize.errors = TRUE)
 
 server2 <- shinyServer(function(input, output, session) {
 

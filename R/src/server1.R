@@ -89,21 +89,6 @@
 
             })
     
-# Input axes ####
-
-    
-    output$flip_axes <- renderUI({
-        condition1 <- callModule(filterSelect, "org")
-        condition2 <- callModule(filterSelect, "discs")
-        if (length(condition1()) > 0 && length(condition2()) > 0) {
-            
-            p("Flip axes", 
-              materialSwitch(inputId = "axes", 
-                           label = "",
-                           value = FALSE,
-                           status = "primary")
-              )} 
-    })
     
     # create outputs for UI 
     
@@ -118,6 +103,17 @@
     
     # grab axes switch ####
     axes_status <- reactive({input$axes})
+    
+    output$check1 <- reactive({
+       length(org()) 
+    })
+    
+    outputOptions(output, 'check1', suspendWhenHidden=FALSE)  
+    
+    output$check2 <- reactive({
+        length(discs()) 
+    })
+    outputOptions(output, 'check2', suspendWhenHidden=FALSE)
     
     # grab percentiles ####
     
@@ -179,7 +175,7 @@
                     step = 0.1, 
                     round = TRUE,
                     ticks = FALSE,
-                    value = -0.1)
+                    value = 1)
         }
                       })
     

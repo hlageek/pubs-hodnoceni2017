@@ -13,7 +13,7 @@ page1 <- tabPanel(
         
         p(
             
-            "Charting application for the data from the ", a("bibliometric evaluation of the Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www"), " of research organisations in 2017."
+            "Charting application for the data from the ", a("bibliometric evaluation of the Czech R&D results", href = "https://hodnoceni17.rvvi.cz/www/biblio-vo"), " of research organisations in 2017."
             
         ),
         # Header title
@@ -55,7 +55,12 @@ page1 <- tabPanel(
                     
                     uiOutput("data_controls"),
                     
-                    uiOutput("flip_axes")
+                    conditionalPanel(condition = "output.check1 > 0 && output.check2 > 0",
+                                p("Flip axes",
+                                  materialSwitch(inputId = "axes",
+                                               label = "",
+                                               value = FALSE,
+                                               status = "primary")))
                     
                      ),
 
