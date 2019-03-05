@@ -435,7 +435,7 @@ req(source_data) # check if source is selected
             
             if (flip_status == TRUE) {
               
-              x <- quote(reorder(factor(discs), desc(n, org)))
+              x <- quote(reorder(factor(discs), desc(n)))
               
             } else {
               x <- quote(reorder(factor(discs), n))
