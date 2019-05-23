@@ -183,13 +183,15 @@ national_results_clean_discs <- national_results %>%
         str_detect(discs, "^6\\.") ~ "Humanities and the Arts"
         ))  %>% 
     mutate(discs = str_replace(discs, "^[^A-Z]*", ""),
-           discs = str_replace(discs, "^O1a\\s", ""),
+           discs = str_replace(discs, "^[O0]1a.+?([A-Z])", "\\1"),
            discs = str_replace(discs, "\\.xlsx$", "") )  %>% # clean for presentation of data
 mutate(discs = str_replace(discs, "tics", "thics")) %>%
     mutate(discs = str_replace(discs, "\\,", "")) %>%
     mutate(discs = tools::toTitleCase(tolower(discs))) %>% 
     filter(!str_detect(discs, "xlsx")) %>% 
-    mutate(org = str_remove(org, "\\,.+$"))
+    mutate(org = str_remove(org, "\\,.[^,]+$")) %>% 
+    mutate(org = str_remove(org, "(s\\.r\\.o\\..*$)|(a\\.s\\.*$)")) %>% 
+    filter(!str_detect(segment, "proceedings"))
 
 if (!file.exists("data/processed/national_results.feather")) feather::write_feather(national_results_clean_discs, "data/processed/national_results.feather")
 if (!file.exists("data/processed/journals.feather")) feather::write_feather(journals, "data/processed/journals.feather")
