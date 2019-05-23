@@ -167,6 +167,7 @@ multi_disc_scopus <- "10. Multidisciplinary"
 
 national_results_clean_discs <- national_results %>% 
     mutate(discs = str_replace(discs, "(^\\d{2}) ", "\\1\\. ")) %>% # clean for conditional recode below
+    mutate(discs = str_replace_all(discs, "_", " ")) %>% # clean for conditional recode below
     mutate(disc_group = case_when(
         discs %in% natural_sciences_scopus ~ "Natural Sciences",
         discs %in% engineering_tech_scopus ~ "Engineering and Technology",
@@ -181,7 +182,8 @@ national_results_clean_discs <- national_results %>%
         str_detect(discs, "^4\\.") ~ "Agricultural and Veterinary Sciences",
         str_detect(discs, "^5\\.") ~ "Social Sciences",
         str_detect(discs, "^6\\.") ~ "Humanities and the Arts"
-        ))  %>% 
+        ))  %>%
+    filter(!is.na(disc_group)) %>% 
     mutate(discs = str_replace(discs, "^[^A-Z]*", ""),
            discs = str_replace(discs, "^[O0]1a.+?([A-Z])", "\\1"),
            discs = str_replace(discs, "\\.xlsx$", "") )  %>% # clean for presentation of data
@@ -191,7 +193,8 @@ mutate(discs = str_replace(discs, "tics", "thics")) %>%
     filter(!str_detect(discs, "xlsx")) %>% 
     mutate(org = str_remove(org, "\\,.[^,]+$")) %>% 
     mutate(org = str_remove(org, "(s\\.r\\.o\\..*$)|(a\\.s\\.*$)")) %>% 
-    filter(!str_detect(segment, "proceedings"))
+    mutate(org = str_replace(org, "MATERIÁLOVÝ A METALURGICKÝ VÝZKUM", "Materiálový a metalurgický výzkum")) %>% 
+    filter(!str_detect(segment, "proceedings")) 
 
 if (!file.exists("data/processed/national_results.feather")) feather::write_feather(national_results_clean_discs, "data/processed/national_results.feather")
 if (!file.exists("data/processed/journals.feather")) feather::write_feather(journals, "data/processed/journals.feather")
