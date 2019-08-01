@@ -149,7 +149,9 @@ journals <- bind_rows(journals_scopus, journals_wos) %>%
     mutate(discs = str_replace(discs, "tics", "thics")) %>%
     mutate(discs = str_replace(discs, "\\,", "")) %>%
     mutate(discs = tools::toTitleCase(tolower(discs))) %>% 
-    filter(!str_detect(discs, "xlsx"))
+    filter(!str_detect(discs, "xlsx")) %>% 
+    mutate(discs = trimws(str_replace_all(discs, "[\\d\\.]", "")))
+
 
 natural_sciences_scopus <- c("11. Agricultural and Biological Sciences", "13. Biochemistry, Genetics and Molecular Biology", "16. Chemistry", "17. Computer Science", "19. Earth and Planetary Sciences", "23. Environmental Science", "24. Immunology and Microbiology", "26. Mathematics", "31. Physics and Astronomy")
 

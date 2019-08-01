@@ -33,7 +33,6 @@ req(source_data) # check if source is selected
     # in wos....
     quantiles_wos <- reactive({ journals %>% 
         filter(segment == "wos") %>% 
-        mutate(discs = trimws(str_replace_all(discs, "[\\d\\.\\,]", ""))) %>%
         group_by(discs) %>% 
         mutate(quantiles = 
                    list(quantile(ais, c(input_pct_low/100,
@@ -46,7 +45,6 @@ req(source_data) # check if source is selected
     # in scopus...
     quantiles_scopus <- reactive({ journals %>% 
             filter(segment == "scopus") %>% 
-            mutate(discs = trimws(str_replace_all(discs, "[\\d\\.\\,]", ""))) %>%
             group_by(discs) %>% 
             mutate(quantiles = 
                        list(quantile(sjr, c(input_pct_low/100, 
