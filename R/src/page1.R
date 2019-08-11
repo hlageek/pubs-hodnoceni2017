@@ -1,6 +1,7 @@
 page1 <- tabPanel(
     "Evalvis 17+",
     fluidPage(
+        # https://douglas-watson.github.io/post/2018-02_shiny_google_analytics/
         tags$head(includeHTML(("google-analytics.html"))),
         
         theme = shinytheme("united"),

@@ -5,7 +5,7 @@
 
 #### Current release
 version 0.1.2 (August 2019)  
-- bugfix
+- bugfix  (Agriculture and Fisheries filter; Google Analytics)  
 version 0.1.1 (March 2019)
 
 ## Tutorial 
