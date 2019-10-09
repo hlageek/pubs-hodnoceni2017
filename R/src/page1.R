@@ -4,6 +4,20 @@ page1 <- tabPanel(
         # https://douglas-watson.github.io/post/2018-02_shiny_google_analytics/
         tags$head(includeHTML(("google-analytics.html"))),
         
+        tags$style(
+            ".irs-bar {",
+            "  border-color: transparent;",
+            "  background-color: transparent;",
+            "}",
+            ".irs-bar-edge {",
+            "  border-color: transparent;",
+            "  background-color: transparent;",
+            "}",
+            ".irs-grid-pol.small {height: 0px;}"
+        ), # transparent slider ink and no minor ticks
+        
+        
+        
         theme = shinytheme("united"),
         
         
@@ -114,8 +128,8 @@ page1 <- tabPanel(
             
                     numericInput(inputId = "threshold",
                                  label = "",
-                                 value = 0,
-                                 min = 0,
+                                 value = 1,
+                                 min = 1,
                                  step = 1)
                     
                     

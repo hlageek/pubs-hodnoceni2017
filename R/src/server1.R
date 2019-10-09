@@ -64,14 +64,24 @@
     
     output$score <- renderUI({
         
-        
+        setSliderColor("gray", 1)
         if (data_source() == "wos") {
             
-            sliderTextInput("percentile", "AIS percentile", seq(0, 100, 5), selected = c(0,100), grid = TRUE, animate = FALSE)
+            
+            
+            sliderTextInput("percentile", "AIS percentile", 
+                            choices = c("Q4", "Q3", "Q2", "Q1", "Decile"), 
+                            selected = c("Q4"), 
+                            grid = TRUE, 
+                            animate = FALSE)
             
         } else if (data_source() == "scopus") {
             
-            sliderTextInput("percentile", "SJR percentile", seq(0, 100, 5), selected = c(0,100), grid = TRUE, animate = FALSE)
+            sliderTextInput("percentile", "SJR percentile", 
+                            choices = c("Q4", "Q3", "Q2", "Q1", "Decile"), 
+                            selected = c("Q4"), 
+                            grid = TRUE, 
+                            animate = FALSE)
             
         }
     })

@@ -16,7 +16,6 @@ national_results <- feather::read_feather(here::here("data", "processed", "evalu
 # source functions
 source("helpers.R", local = T)
 source("src/org_by_disc.R", local = T)
-source("src/plot_freq_words.R", local = T)
 
 # source UI
 source("src/page1.R", local = T)

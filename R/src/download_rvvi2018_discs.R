@@ -89,7 +89,12 @@ cleaned_sheets <- sheets %>%
             cz_author = cz_autor,
             international = mezinarodni_spoluprace) %>% 
      mutate(disc_group = str_replace(disc_group, "^[\\W\\d]*", "")) %>% 
-     mutate(discs = str_replace(discs, "^[\\W\\d]*", "")) 
+     mutate(discs = str_replace(discs, "^[\\W\\d]*", "")) %>% 
+     mutate(quantiles = case_when(quantiles == "Decil" ~ 1,
+                                  quantiles == "Q1" ~ 2,
+                                  quantiles == "Q2" ~ 3,
+                                  quantiles == "Q3" ~ 4,
+                                  quantiles == "Q4" ~ 5))
      
     
 
