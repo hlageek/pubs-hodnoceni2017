@@ -5,4 +5,5 @@
 | Version         | Date           | Notes |
 |-----------------|----------------|-------|
 | 0.1.1           | 2019-03-04     | release      |
+| 0.1.2           | 2019-08-12     | bugfix  (Agriculture and Fisheries filter; Google Analytics) |
 
