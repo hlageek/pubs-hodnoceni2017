@@ -5,14 +5,28 @@ page1 <- tabPanel(
         tags$head(includeHTML(("google-analytics.html"))),
         
         tags$style(
-            ".irs-bar {",
-            "  border-color: transparent;",
-            "  background-color: transparent;",
+            ".irs-from {",
+            "  background-color:  #dd4814;",
             "}",
+            
+            ".irs-to {",
+            "  background-color:  #dd4814;",
+            "}",
+            
+            ".irs-single {",
+            "  background-color:  #dd4814;",
+            "}",
+
+            ".irs-bar {",
+            "  border-color:  #dd4814;",
+            "  background-color:  #dd4814;",
+            "}",
+            
             ".irs-bar-edge {",
             "  border-color: transparent;",
             "  background-color: transparent;",
             "}",
+            
             ".irs-grid-pol.small {height: 0px;}"
         ), # transparent slider ink and no minor ticks
         
@@ -58,7 +72,7 @@ page1 <- tabPanel(
                     
                     # data source ####
                     
-                    wellPanel(pickerUI("data_source", "Data source", c("Web of Science" = "wos", "Scopus" = "scopus"), "wos")),
+                    wellPanel(singleSelectUI("data_source", "Data source", c("Web of Science" = "wos", "Scopus" = "scopus"), "wos")),
                     
                     
                     

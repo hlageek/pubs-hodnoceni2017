@@ -3,7 +3,7 @@
     
     # data choices ####
     
-    data_source <- callModule(picker, "data_source")
+    data_source <- callModule(singleSelect, "data_source")
     
     # prepare source data to work with based on data source ####
     source_data <- reactive({national_results  %>% 
@@ -71,7 +71,7 @@
             
             sliderTextInput("percentile", "AIS percentile", 
                             choices = c("Q4", "Q3", "Q2", "Q1", "Decile"), 
-                            selected = c("Q4"), 
+                            selected = c("Q4", "Decile"), 
                             grid = TRUE, 
                             animate = FALSE)
             
@@ -79,7 +79,7 @@
             
             sliderTextInput("percentile", "SJR percentile", 
                             choices = c("Q4", "Q3", "Q2", "Q1", "Decile"), 
-                            selected = c("Q4"), 
+                            selected = c("Q4", "Decile"), 
                             grid = TRUE, 
                             animate = FALSE)
             
