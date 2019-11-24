@@ -19,11 +19,14 @@ eval_data_reduced <- eval_data %>%
     mutate(org = str_replace(org, "MATERIÁLOVÝ A METALURGICKÝ VÝZKUM", "Materiálový a metalurgický výzkum")) %>% 
     # the below segment was moved here from on the fly implementation in the app
     group_by(discs, org, year, segment) %>% 
-    mutate(total_org_disc = n()) %>% 
+    mutate(total_org_disc_dup = n()) %>% 
+    mutate(total_org_disc_dedup = n_distinct(title)) %>% 
     group_by(org, year, segment) %>% 
-    mutate(total_org = n()) %>%
+    mutate(total_org_dup = n()) %>%
+    mutate(total_org_dedup = n_distinct(title)) %>%
     group_by(discs, year, segment) %>% 
-    mutate(total_disc = n()) %>% 
+    mutate(total_disc_dup = n()) %>%
+    mutate(total_disc_dedup = n_distinct(title)) %>% 
     ungroup()
 
     feather::write_feather(eval_data_reduced, 

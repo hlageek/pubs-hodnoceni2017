@@ -34,7 +34,7 @@
             
             bsPopover(id = "q1", 
                       title = "", 
-                      content = "Percentages represent a share of results in a discipline from the sum of results in an organization.",
+                      content = "Percentages represent a share of results in a discipline from the sum of results in an organization and/or discipline.",
                       placement = "right", 
                       trigger = "hover",
                       options = list(container = "body")),

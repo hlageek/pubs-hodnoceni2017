@@ -107,9 +107,11 @@ org_by_disc <- function(source_data,
                 filter(discs %in% input_discs) %>% 
                 group_by(org, discs, year) %>% 
                 mutate(n = n()) %>% 
-                filter(n >= input_threshold_val) %>% 
-                mutate(pct = round((n()/total_org_disc), 3)) %>% 
+               filter(n >= input_threshold_val) %>% 
+               mutate(n = n()) %>% 
+                mutate(pct = round((n/total_org_disc_dup), 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE) 
+
             
             # myplot_data <- plot_data() %>% 
             #     filter(discs %in% input_discs) %>% 
@@ -154,7 +156,8 @@ org_by_disc <- function(source_data,
                 group_by(org, discs, year) %>% 
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
-                mutate(pct = round((n/total_org), 3)) %>% 
+              mutate(n = n()) %>% 
+                mutate(pct = round((n/total_disc_dup), 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE)  
             
             
@@ -258,7 +261,7 @@ org_by_disc <- function(source_data,
                 group_by(org, discs, year) %>% 
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
-                mutate(pct = round(n/total_org_disc, 3)) %>% 
+                mutate(pct = round(n/total_org_disc_dedup, 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE) 
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
@@ -297,7 +300,7 @@ org_by_disc <- function(source_data,
                 group_by(org, discs, year) %>% 
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
-                mutate(pct = round((n/total_org), 3)) %>% 
+                mutate(pct = round((n/total_org_dup), 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE) 
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
@@ -458,9 +461,8 @@ org_by_disc <- function(source_data,
               group_by(org, discs, year) %>%  
               mutate(n = n()) %>% 
               filter(n >= input_threshold_val) %>% 
-              mutate(pct = round((n()/total_org_disc), 3)) %>% 
+              mutate(pct = round((n()/total_org_disc_dup), 3)) %>% 
               distinct(org, discs, .keep_all = TRUE) #pct 
-            
             
             validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
             
@@ -500,9 +502,10 @@ org_by_disc <- function(source_data,
                 group_by(org, discs, year) %>%  
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
-                mutate(pct = round((n()/total_org_disc), 3)) %>% 
+                mutate(pct = round((n()/total_org_disc_dedup), 3)) %>% 
                 distinct(org, discs, .keep_all = TRUE) #pct 
               
+
               
               validate(need(nrow(myplot_data) > 0, "No data match these criteria!"))
               
@@ -545,7 +548,7 @@ org_by_disc <- function(source_data,
               group_by(org, discs, year) %>% 
               mutate(n = n()) %>% 
               filter(n >= input_threshold_val) %>% 
-              mutate(pct = round((n()/total_org), 3)) %>% 
+              mutate(pct = round((n()/total_org_dup), 3)) %>% 
               distinct(org, discs, .keep_all = TRUE)  #pct 
             
             
@@ -587,7 +590,7 @@ org_by_disc <- function(source_data,
               group_by(org, discs, year) %>% 
               mutate(n = n()) %>% 
               filter(n >= input_threshold_val) %>% 
-              mutate(pct = round((n()/total_org), 3)) %>% 
+              mutate(pct = round((n()/total_org_dup), 3)) %>% 
               distinct(org, discs, .keep_all = TRUE)  #pct 
             
             
