@@ -20,7 +20,6 @@ org_by_disc <- function(source_data,
                         input_axes) {
 
   req(source_data) # check if source is selected
-  req(year) # check if year is selected
   
 # Theme selector ####
     theme_select <- if (input_theme == "Void") theme_void() + theme(panel.grid.major = element_blank(), 
@@ -214,7 +213,7 @@ org_by_disc <- function(source_data,
             
             myplot_data <- plot_data() %>% 
                 filter(org %in% input_org) %>% 
-                group_by(org) %>% 
+                group_by(org, year) %>% 
                 count(discs) %>% 
               filter(n >= input_threshold_val) 
             
@@ -234,11 +233,13 @@ org_by_disc <- function(source_data,
                            fill = org,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        n))) +
+                                        n),
+                           alpha = as.factor(year))) +
               {if (n_distinct(myplot_data$org) < 10) {
                 scale_fill_brewer(type = "qual", palette = "Set1") }} +
               geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
+              scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
         } 
