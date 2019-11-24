@@ -2,7 +2,8 @@
 
 
 
-org_by_disc <- function(source_data, 
+org_by_disc <- function(source_data,
+                        input_year,
                         input_org, 
                         input_discs, 
                         input_theme, 
@@ -18,8 +19,9 @@ org_by_disc <- function(source_data,
                         input_pct_score_org,
                         input_axes) {
 
-req(source_data) # check if source is selected
-
+  req(source_data) # check if source is selected
+  req(year) # check if year is selected
+  
 # Theme selector ####
     theme_select <- if (input_theme == "Void") theme_void() + theme(panel.grid.major = element_blank(), 
                                                                     panel.grid.minor = element_blank()) else 
@@ -27,7 +29,20 @@ req(source_data) # check if source is selected
                     if (input_theme == "Grid")  theme_bw() else
                     if (input_theme == "Classic") theme_gray()
     
-# Percentile filter ####
+
+    
+    # Year filter ####
+    
+    
+    years_data <- reactive({ 
+      
+        source_data %>%
+          filter(year %in% input_year)
+
+    })
+    
+    
+    # Percentile filter ####
     
     
     plot_data <- reactive({ 
@@ -35,11 +50,11 @@ req(source_data) # check if source is selected
                 if (input_pct_high < 100 |
                     input_pct_low > 0) {
                     
-                    source_data %>%
+                  years_data() %>%
                     filter(quantiles >= input_pct_low & quantiles < input_pct_high)
                   
                 } else {
-                    source_data  }
+                  years_data()  }
     })
     
     

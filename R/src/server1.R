@@ -4,6 +4,7 @@
     # data choices ####
     
     data_source <- callModule(singleSelect, "data_source")
+    year <- reactive({input$year})
     
     # prepare source data to work with based on data source ####
     source_data <- reactive({national_results  %>% 
@@ -203,6 +204,7 @@
             
             output$myplot <- renderPlotly({
                 org_by_disc(source_data = source_data(),
+                            input_year = year(),
                             input_org = org(),
                             input_discs =  discs(),
                             input_theme = theme(),

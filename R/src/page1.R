@@ -72,7 +72,23 @@ page1 <- tabPanel(
                     
                     # data source ####
                     
-                    wellPanel(singleSelectUI("data_source", "Data source", c("Web of Science" = "wos", "Scopus" = "scopus"), "wos")),
+                    wellPanel(
+                        
+                        pickerInput( # Input control - years selector
+                            inputId = "year",
+                            label = "Year",
+                            choices = c(2016, 2017),
+                            selected = 2017,
+                            multiple = TRUE,
+                            options = pickerOptions(
+                                style = "primary; .selected {background-color:gray !important;}"
+                            )),
+                        
+                        singleSelectUI("data_source", 
+                                       "Data source", 
+                                       c("Web of Science" = "wos", 
+                                         "Scopus" = "scopus"), 
+                                       "wos")),
                     
                     
                     
