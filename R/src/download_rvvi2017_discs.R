@@ -200,3 +200,5 @@ mutate(discs = str_replace(discs, "tics", "thics")) %>%
 
 if (!file.exists("data/processed/national_results.feather")) feather::write_feather(national_results_clean_discs, "data/processed/national_results.feather")
 if (!file.exists("data/processed/journals.feather")) feather::write_feather(journals, "data/processed/journals.feather")
+
+source(here::here("R", "src", "clean_data_org.R"))

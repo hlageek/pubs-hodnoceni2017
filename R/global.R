@@ -11,7 +11,7 @@ require(plotly)
 require(shinyWidgets)
 require(shinyBS)
 
-national_results <- feather::read_feather(here::here("data", "processed", "evaluation2018.feather"))
+national_results <- feather::read_feather(here::here("data", "processed", "evaluation2017-2018.feather"))
 
 # source functions
 source("helpers.R", local = T)
