@@ -29,62 +29,17 @@ req(source_data) # check if source is selected
     
 # Percentile filter ####
     
-    # First we obtain disciplinary quantiles for all journals
-    # in wos....
-    quantiles_wos <- reactive({ journals %>% 
-        filter(segment == "wos") %>% 
-        group_by(discs) %>% 
-        mutate(quantiles = 
-                   list(quantile(ais, c(input_pct_low/100,
-                                        input_pct_high/100)))) %>%
-        mutate(minq = quantiles[[1]][[1]],
-               maxq = quantiles[[1]][[2]]) %>% 
-        ungroup() %>% 
-        select(discs, minq, maxq) %>% 
-        dplyr::distinct(discs, .keep_all = TRUE) })
-    # in scopus...
-    quantiles_scopus <- reactive({ journals %>% 
-            filter(segment == "scopus") %>% 
-            group_by(discs) %>% 
-            mutate(quantiles = 
-                       list(quantile(sjr, c(input_pct_low/100, 
-                                            input_pct_high/100)))) %>%
-            mutate(minq = quantiles[[1]][[1]],
-                   maxq = quantiles[[1]][[2]]) %>% 
-            ungroup() %>% 
-            select(discs, minq, maxq) %>% 
-            dplyr::distinct(discs, .keep_all = TRUE) })
     
     plot_data <- reactive({ 
-       if (!is.na(source_data$ais[1])) { # filter AIS for WOS data
-            
+
                 if (input_pct_high < 100 |
                     input_pct_low > 0) {
                     
                     source_data %>%
-                    left_join(quantiles_wos(), by = "discs") %>% 
-                    group_by(discs) %>% 
-                    filter(ais > minq & ais <= maxq)  %>% 
-                    ungroup()
-      
+                    filter(quantiles >= input_pct_low & quantiles < input_pct_high)
+                  
                 } else {
                     source_data  }
-            } 
-       else if (!is.na(source_data$sjr[1])) { # filter SJR for SCOPUS data
-           
-               if (input_pct_high < 100 |
-                   input_pct_low > 0) {
-                 
-                   source_data %>%
-                   left_join(quantiles_scopus(), by = "discs") %>% 
-                   group_by(discs) %>% 
-                   filter(sjr > minq & sjr <= maxq) %>% 
-                   ungroup() 
-                   
-                   
-               } else {
-                   source_data  }
-           }
     })
     
     

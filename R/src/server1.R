@@ -70,16 +70,16 @@
             
             
             sliderTextInput("percentile", "AIS percentile", 
-                            choices = c("Q4", "Q3", "Q2", "Q1", "Decile"), 
-                            selected = c("Q4", "Decile"), 
+                            choices = c(0, 25, 50, 75, 90, 100), 
+                            selected = c(0, 100), 
                             grid = TRUE, 
                             animate = FALSE)
             
         } else if (data_source() == "scopus") {
             
             sliderTextInput("percentile", "SJR percentile", 
-                            choices = c("Q4", "Q3", "Q2", "Q1", "Decile"), 
-                            selected = c("Q4", "Decile"), 
+                            choices = c(0, 25, 50, 75, 90, 100), 
+                            selected = c(0, 100), 
                             grid = TRUE, 
                             animate = FALSE)
             
@@ -127,8 +127,8 @@
     
     # grab percentiles ####
     
-    percentile_low <- reactive({input$percentile[1]})
-    percentile_high <- reactive({input$percentile[2]})
+    percentile_low <- reactive({ as.numeric(input$percentile[1]) })
+    percentile_high <- reactive({ as.numeric(input$percentile[2]) })
     
     # grab percentage score switch ####
     pct_score <- reactive({input$flip_pct_score})

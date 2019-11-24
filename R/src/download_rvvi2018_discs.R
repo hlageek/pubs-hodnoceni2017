@@ -42,19 +42,23 @@ walk(websource$dirs, ~ mkdirs(.x)) # apply the function
 
 if (sum(str_detect(list.files("data/discs2018", recursive = TRUE), "zip")) < 1) {
 walk2(websource$links, str_replace(websource$zipfiles, "(.*discs/).*/(.*)", "\\1\\2"), ~download.file(.x, .y)) # download files from web to target files
+    
+    unzip2 <- function(zipfile, exdir) {system(paste0("7z x -o", exdir, " -y ", shQuote(zipfile)))}
+    
+    websource %>% select(-zipfiles, -links) %>% 
+        mutate(files = {map(.$dirs, list.files)}) %>% 
+        unnest(files) %>% 
+        mutate(files = paste0(dirs, "/", files)) %>% 
+        filter(str_detect(files, "zip")) %>% 
+        select( zipfile = files,
+                exdir = dirs) %>% # select columns to serve as arguments to unzip
+        pwalk(unzip2) # unzip files
+    
 } else {cat("Files are already downloaded")}
 
-unzip2 <- function(zipfile, exdir) {system(paste0("7z x -o", exdir, " -y ", shQuote(zipfile)))}
 
 
-websource %>% select(-zipfiles, -links) %>% 
-    mutate(files = {map(.$dirs, list.files)}) %>% 
-    unnest(files) %>% 
-    mutate(files = paste0(dirs, "/", files)) %>% 
-    filter(str_detect(files, "zip")) %>% 
-    select( zipfile = files,
-            exdir = dirs) %>% # select columns to serve as arguments to unzip
-    pwalk(unzip2) # unzip files
+
 
 sheets <- websource %>% select(-zipfiles, -links) %>% #### bacha
     mutate(files = map(.$dirs, list.files)) %>%
@@ -90,23 +94,24 @@ cleaned_sheets <- sheets %>%
             international = mezinarodni_spoluprace) %>% 
      mutate(disc_group = str_replace(disc_group, "^[\\W\\d]*", "")) %>% 
      mutate(discs = str_replace(discs, "^[\\W\\d]*", "")) %>% 
-     mutate(quantiles = case_when(quantiles == "Decil" ~ 1,
-                                  quantiles == "Q1" ~ 2,
-                                  quantiles == "Q2" ~ 3,
-                                  quantiles == "Q3" ~ 4,
-                                  quantiles == "Q4" ~ 5))
+     mutate(quantiles = case_when(quantiles == "Decil" ~ 90,
+                                  quantiles == "Q1" ~ 75,
+                                  quantiles == "Q2" ~ 50,
+                                  quantiles == "Q3" ~ 25,
+                                  quantiles == "Q4" ~ 0))
      
     
 
-if (!file.exists("data/processed/evaluation2017.feather")) {
     feather::write_feather(cleaned_sheets %>% 
                                filter(year == 2016), 
                            "data/processed/evaluation2017.feather")
-}
 
-if (!file.exists("data/processed/evaluation2018.feather")) {
+
     feather::write_feather(cleaned_sheets %>% 
                                filter(year == 2017), 
                            "data/processed/evaluation2018.feather")
-}
 
+
+
+
+source(here::here("R", "src", "clean_data_org.R"))
