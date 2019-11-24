@@ -68,7 +68,7 @@ org_by_disc <- function(source_data,
         myplot_data <- plot_data() %>% 
             filter(discs %in% input_discs) %>% 
             #filter(!duplicated(title)) %>% 
-            group_by(org) %>% 
+            group_by(org, year) %>% 
             count(discs) %>% 
           filter(n >= input_threshold_val)
         
@@ -88,11 +88,13 @@ org_by_disc <- function(source_data,
                        fill = discs,
                        text = paste(org, "\n",
                                     discs, "\n",
-                                    n))) +
+                                    n),
+                       alpha = as.factor(year))) +
           {if (n_distinct(myplot_data$discs) < 10) {
             scale_fill_brewer(type = "qual", palette = "Set1") }} +
           geom_bar(stat = "identity", 
                      position = position_dodge(preserve = "single")) +
+          scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
             labs(x = "", y = "", title = input_title) +
             theme_select 
         }
@@ -103,7 +105,7 @@ org_by_disc <- function(source_data,
             
             myplot_data <- plot_data() %>% 
                 filter(discs %in% input_discs) %>% 
-                group_by(org, discs) %>% 
+                group_by(org, discs, year) %>% 
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
                 mutate(pct = round((n()/total_org_disc), 3)) %>% 
@@ -131,11 +133,13 @@ org_by_disc <- function(source_data,
                            fill = discs,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        pct))) +
+                                        pct),
+                           alpha = as.factor(year))) +
               {if (n_distinct(myplot_data$discs) < 10) {
                 scale_fill_brewer(type = "qual", palette = "Set1") }} +
               geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
+              scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
@@ -147,7 +151,7 @@ org_by_disc <- function(source_data,
             
             myplot_data <- plot_data() %>% 
                 filter(discs %in% input_discs) %>% 
-                group_by(org, discs) %>% 
+                group_by(org, discs, year) %>% 
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
                 mutate(pct = round((n/total_org), 3)) %>% 
@@ -170,11 +174,13 @@ org_by_disc <- function(source_data,
                            fill = discs,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        pct))) +
+                                        pct),
+                           alpha = as.factor(year))) +
               {if (n_distinct(myplot_data$discs) < 10) {
                 scale_fill_brewer(type = "qual", palette = "Set1") }} +
               geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
+              scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
@@ -249,7 +255,7 @@ org_by_disc <- function(source_data,
             
             myplot_data <- plot_data() %>% 
                 filter(org %in% input_org) %>% 
-                group_by(org, discs) %>% 
+                group_by(org, discs, year) %>% 
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
                 mutate(pct = round(n/total_org_disc, 3)) %>% 
@@ -271,11 +277,13 @@ org_by_disc <- function(source_data,
                            fill = org,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        pct))) +
+                                        pct),
+                           alpha = as.factor(year))) +
               {if (n_distinct(myplot_data$org) < 10) {
                 scale_fill_brewer(type = "qual", palette = "Set1") }} +
               geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
+              scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
@@ -286,7 +294,7 @@ org_by_disc <- function(source_data,
             
             myplot_data <- plot_data() %>% 
                 filter(org %in% input_org) %>% 
-                group_by(org, discs) %>% 
+                group_by(org, discs, year) %>% 
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
                 mutate(pct = round((n/total_org), 3)) %>% 
@@ -309,11 +317,13 @@ org_by_disc <- function(source_data,
                            fill = org,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        pct))) +
+                                        pct),
+                           alpha = as.factor(year))) +
               {if (n_distinct(myplot_data$org) < 10) {
                 scale_fill_brewer(type = "qual", palette = "Set1") }} +
               geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
+              scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
@@ -355,7 +365,7 @@ org_by_disc <- function(source_data,
               filter(org %in% input_org) %>%
               filter(discs %in% input_discs) %>%
               #filter(!duplicated(title)) %>% 
-              group_by(org) %>% 
+              group_by(org, year) %>% 
               count(discs) %>% 
               filter(n >= input_threshold_val) 
             
@@ -376,11 +386,13 @@ org_by_disc <- function(source_data,
                            fill = discs,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        n))) +
+                                        n),
+                           alpha = as.factor(year))) +
               {if (n_distinct(myplot_data$discs) < 10) {
                 scale_fill_brewer(type = "qual", palette = "Set1") }} +
                 geom_bar(stat = "identity",
                          position = position_dodge(preserve = "single")) +
+              scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
                 # geom_bar(stat = "identity",
                 #          position = position_stack()) +
                 labs(x = "", y = "", title = input_title) +
@@ -395,7 +407,7 @@ org_by_disc <- function(source_data,
               filter(org %in% input_org) %>%
               filter(discs %in% input_discs) %>%
               #filter(!duplicated(title)) %>% 
-              group_by(org) %>% 
+              group_by(org, year) %>% 
               count(discs) %>% 
               filter(n >= input_threshold_val) 
             
@@ -416,11 +428,13 @@ org_by_disc <- function(source_data,
                          fill = org,
                          text = paste(org, "\n",
                                       discs, "\n",
-                                      n))) +
+                                      n),
+                         alpha = as.factor(year))) +
               {if (n_distinct(myplot_data$discs) < 10) {
                 scale_fill_brewer(type = "qual", palette = "Set1") }} +
               geom_bar(stat = "identity",
                        position = position_dodge(preserve = "single")) +
+              scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
               # geom_bar(stat = "identity",
               #          position = position_stack()) +
               labs(x = "", y = "", title = input_title) +
@@ -441,7 +455,7 @@ org_by_disc <- function(source_data,
               filter(org %in% input_org) %>%
               filter(discs %in% input_discs) %>%
               #filter(!duplicated(title)) %>% 
-              group_by(org, discs) %>%  
+              group_by(org, discs, year) %>%  
               mutate(n = n()) %>% 
               filter(n >= input_threshold_val) %>% 
               mutate(pct = round((n()/total_org_disc), 3)) %>% 
@@ -464,11 +478,13 @@ org_by_disc <- function(source_data,
                            fill = discs,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        pct))) +
+                                        pct),
+                           alpha = as.factor(year))) +
               {if (n_distinct(myplot_data$discs) < 10) {
                 scale_fill_brewer(type = "qual", palette = "Set1") }} +
               geom_bar(stat = "identity",
                          position = position_dodge(preserve = "single")) +
+              scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select
@@ -481,7 +497,7 @@ org_by_disc <- function(source_data,
                 filter(org %in% input_org) %>%
                 filter(discs %in% input_discs) %>%
                 #filter(!duplicated(title)) %>% 
-                group_by(org, discs) %>%  
+                group_by(org, discs, year) %>%  
                 mutate(n = n()) %>% 
                 filter(n >= input_threshold_val) %>% 
                 mutate(pct = round((n()/total_org_disc), 3)) %>% 
@@ -504,11 +520,13 @@ org_by_disc <- function(source_data,
                            fill = org,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        pct))) +
+                                        pct),
+                           alpha = as.factor(year))) +
                 {if (n_distinct(myplot_data$discs) < 10) {
                   scale_fill_brewer(type = "qual", palette = "Set1") }} +
                 geom_bar(stat = "identity",
                          position = position_dodge(preserve = "single")) +
+                scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select
@@ -524,7 +542,7 @@ org_by_disc <- function(source_data,
             filter(org %in% input_org) %>%
               filter(discs %in% input_discs) %>%
               #filter(!duplicated(title)) %>% 
-              group_by(org, discs) %>% 
+              group_by(org, discs, year) %>% 
               mutate(n = n()) %>% 
               filter(n >= input_threshold_val) %>% 
               mutate(pct = round((n()/total_org), 3)) %>% 
@@ -547,11 +565,13 @@ org_by_disc <- function(source_data,
                            fill = discs,
                            text = paste(org, "\n",
                                         discs, "\n",
-                                        pct))) +
+                                        pct),
+                           alpha = as.factor(year))) +
               {if (n_distinct(myplot_data$discs) < 10) {
                 scale_fill_brewer(type = "qual", palette = "Set1") }} +
               geom_bar(stat = "identity", 
                          position = position_dodge(preserve = "single")) +
+              scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
                 scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
                 labs(x = "", y = "", title = input_title) +
                 theme_select 
@@ -564,7 +584,7 @@ org_by_disc <- function(source_data,
             filter(org %in% input_org) %>%
               filter(discs %in% input_discs) %>%
               #filter(!duplicated(title)) %>% 
-              group_by(org, discs) %>% 
+              group_by(org, discs, year) %>% 
               mutate(n = n()) %>% 
               filter(n >= input_threshold_val) %>% 
               mutate(pct = round((n()/total_org), 3)) %>% 
@@ -587,11 +607,13 @@ org_by_disc <- function(source_data,
                          fill = org,
                          text = paste(org, "\n",
                                       discs, "\n",
-                                      pct))) +
+                                      pct),
+                         alpha = as.factor(year))) +
               {if (n_distinct(myplot_data$discs) < 10) {
                 scale_fill_brewer(type = "qual", palette = "Set1") }} +
               geom_bar(stat = "identity", 
                        position = position_dodge(preserve = "single")) +
+              scale_alpha_discrete(name = "Year", range = c(1, 0.5), labels = myplot_data$year) +
               scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1)) + #pct
               labs(x = "", y = "", title = input_title) +
               theme_select 

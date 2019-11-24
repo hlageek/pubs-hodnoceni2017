@@ -11,18 +11,18 @@ eval_data_reduced %>% pull(org) %>% unique() %>%
 
 
 eval_data_reduced <- eval_data %>% 
-    select(id, year, disc_group, discs, segment,org, quantiles) %>% 
+    select(id, year, disc_group, discs, segment,org, quantiles, title, pub) %>% 
     mutate(org = str_split(org, ";")) %>% 
     unnest(org) %>% 
     mutate(org = trimws(org)) %>% 
     mutate(org = str_remove(org, "[,\\s](\\s)?([vosazp]\\.|spol\\.|příspěvková).*")) %>% 
     mutate(org = str_replace(org, "MATERIÁLOVÝ A METALURGICKÝ VÝZKUM", "Materiálový a metalurgický výzkum")) %>% 
     # the below segment was moved here from on the fly implementation in the app
-    group_by(discs, org) %>% 
+    group_by(discs, org, year, segment) %>% 
     mutate(total_org_disc = n()) %>% 
-    group_by(org) %>% 
+    group_by(org, year, segment) %>% 
     mutate(total_org = n()) %>%
-    group_by(discs) %>% 
+    group_by(discs, year, segment) %>% 
     mutate(total_disc = n()) %>% 
     ungroup()
 
