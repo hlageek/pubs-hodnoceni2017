@@ -8,15 +8,7 @@
     
     # prepare source data to work with based on data source ####
     source_data <- reactive({national_results  %>% 
-            filter(segment == data_source()) %>% 
-                       # this segment could be moved to processed data rather than on the fly
-            group_by(discs, org) %>% 
-            mutate(total_org_disc = n()) %>% 
-            group_by(org) %>% 
-            mutate(total_org = n()) %>%
-            group_by(discs) %>% 
-            mutate(total_disc = n()) %>% 
-            ungroup()
+            filter(segment == data_source()) 
                        })
     
     # Input discipline and organization ####
@@ -203,6 +195,7 @@
         if (isTruthy(org()) | isTruthy(discs())) {
             
             output$myplot <- renderPlotly({
+                
                 org_by_disc(source_data = source_data(),
                             input_year = year(),
                             input_org = org(),
